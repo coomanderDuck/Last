@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using WeeebLibrary.Models;
 using WeeebLibrary.Database.Entitys;
 
-namespace CustomIdentityApp.Controllers
+namespace WeeebLibrary.Controllers
 {
     public class UsersController : Controller
     {

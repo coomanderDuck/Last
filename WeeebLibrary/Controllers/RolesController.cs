@@ -8,7 +8,7 @@ using WeeebLibrary.Database.Entitys;
 using WeeebLibrary.Models;
 
 
-namespace CustomIdentityApp.Controllers
+namespace WeeebLibrary.Controllers
 {
     public class RolesController : Controller
     {

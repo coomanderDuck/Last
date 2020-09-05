@@ -38,7 +38,7 @@ namespace WeeebLibrary
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
             if (env.IsDevelopment())
@@ -64,6 +64,18 @@ namespace WeeebLibrary
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+
+            var scope = scopeFactory.CreateScope();
+
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+
+            var rolesManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            await RoleInitializer.InitializeAsync(userManager, rolesManager);
+
         }
     }
 }
