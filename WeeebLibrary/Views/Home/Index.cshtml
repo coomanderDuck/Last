@@ -6,20 +6,24 @@
 @if (User.Identity.IsAuthenticated)
 {
     <p>Добро пожаловать, @User.Identity.Name</p>
-
+    @if (User.IsInRole("Admin"))
+    {
     <p class="lead">
         <a href="https://localhost:44380/Users" class="btn btn-lg btn-secondary">Все пользователи</a>
     </p>
-    <p class="lead">
-        <a href="Roles" class="btn btn-lg btn-secondary">Список ролей</a>
-    </p>
-    <p class="lead">
-        <a href="https://localhost:44380/Roles/UserList" class="btn btn-lg btn-secondary">Права доступа</a>
-    </p>
-    <form method="post" asp-controller="Account" asp-action="Logout">
-        <input type="submit" value="Выход" />
-    </form>
 
+
+        <p class="lead">
+            <a href="Roles" class="btn btn-lg btn-secondary">Список ролей</a>
+        </p>
+        <p class="lead">
+            <a href="https://localhost:44380/Roles/UserList" class="btn btn-lg btn-secondary">Права доступа</a>
+        </p>
+    }
+        <form method="post" asp-controller="Account" asp-action="Logout">
+            <input type="submit" value="Выход" />
+        </form>
+    
 }
 else
 {

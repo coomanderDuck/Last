@@ -43,11 +43,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Publisher)
             </td>
+            
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> 
-                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> 
-                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-            </td>
+                @if (User.IsInRole("Библиотекарь"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                }
+                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
+                @if (User.IsInRole("Библиотекарь"))
+                {
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                }
+                </td>
         </tr>
 }
     </tbody>

@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using WeeebLibrary.Database.Entitys;
 using WeeebLibrary.Models;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace WeeebLibrary.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
         RoleManager<IdentityRole> _roleManager;

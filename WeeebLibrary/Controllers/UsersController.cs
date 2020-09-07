@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using WeeebLibrary.Models;
 using WeeebLibrary.Database.Entitys;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WeeebLibrary.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         UserManager<User> _userManager;
