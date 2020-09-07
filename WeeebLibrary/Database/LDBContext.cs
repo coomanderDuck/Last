@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace WeeebLibrary.Database
 {
-    public class LDBContext
-    {
+   
         public class LDbContext : IdentityDbContext<User>
         {
-            public DbSet<Microsoft.AspNetCore.Identity.IdentityUserClaim<Guid>> IdentityUserClaims { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Microsoft.AspNetCore.Identity.IdentityUserClaim<Guid>> IdentityUserClaims { get; set; }
 
             public LDbContext(DbContextOptions<LDbContext> options)
                 : base(options)
@@ -21,5 +21,5 @@ namespace WeeebLibrary.Database
                 Database.EnsureCreated();
             }
         }
-    }
+    
 }

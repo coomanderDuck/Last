@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using static WeeebLibrary.Database.LDBContext;
+using static WeeebLibrary.Database.LDbContext;
 
 namespace WeeebLibrary
 {
@@ -35,6 +35,10 @@ namespace WeeebLibrary
             })
                 .AddEntityFrameworkStores<LDbContext>();
             services.AddControllersWithViews();
+
+           
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

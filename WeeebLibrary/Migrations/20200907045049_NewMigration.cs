@@ -51,6 +51,25 @@ namespace WeeebLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Autor = table.Column<string>(nullable: true),
+                    Genre = table.Column<string>(nullable: true),
+                    Publisher = table.Column<string>(nullable: true),
+                    Desc = table.Column<string>(nullable: true),
+                    img = table.Column<string>(nullable: true),
+                    Available = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "IdentityUserClaims",
                 columns: table => new
                 {
@@ -225,6 +244,9 @@ namespace WeeebLibrary.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "IdentityUserClaims");
