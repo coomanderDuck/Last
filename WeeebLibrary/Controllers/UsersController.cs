@@ -31,6 +31,7 @@ namespace WeeebLibrary.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "Клиент");
                     return RedirectToAction("Index");
                 }
                 else

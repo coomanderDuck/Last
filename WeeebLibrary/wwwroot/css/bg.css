@@ -1,7 +1,5 @@
-﻿table {
-    background: white; /* Цвет фона таблицы */
+﻿
+table {
     
-}
-td {
-    background: white; /* Цвет фона ячеек */
-}
+    color: white; /* Цвет текста */
+   }

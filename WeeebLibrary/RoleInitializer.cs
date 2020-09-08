@@ -8,13 +8,21 @@ namespace WeeebLibrary
     {
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            string adminEmail = "egorco53gmail.com";
+            string adminEmail = "egorcos5@3gmail.com";
             string password = "Pass123!";
             if (await roleManager.FindByNameAsync("Admin") == null)
             {
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
             }
-           
+            if (await roleManager.FindByNameAsync("Библиотекарь") == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole("Библиотекарь"));
+            }
+            if (await roleManager.FindByNameAsync("Клиент") == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole("Клиент"));
+            }
+
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
                 User Admin = new User { Email = adminEmail, UserName = adminEmail };
