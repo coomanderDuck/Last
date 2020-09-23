@@ -49,20 +49,22 @@
                 </td>
 
                 <td>
-                    @if (User.IsInRole("Клиент"))
-                    {
-                    <p><a  asp-controller="Cart" asp-action="addToCart" asp-route-id="@item.Id">Запись</a></p>
-                    }
+                    <p>
+                        @if (User.IsInRole("Клиент"))
+                        {
+                            <a asp-controller="Cart" asp-action="addToCart" asp-route-id="@item.Id">Запись</a>
+                        }
 
-                    @if (User.IsInRole("Библиотекарь"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
-                    }
-                    <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
-                    @if (User.IsInRole("Библиотекарь"))
-                    {
-                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-                    }
+                        @if (User.IsInRole("Библиотекарь"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                        }
+                        <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
+                        @if (User.IsInRole("Библиотекарь"))
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                        }
+                    </p>
                 </td>
             </tr>
         }
