@@ -1,0 +1,12 @@
+﻿@model WeeebLibrary.Models.CartViewModel
+<div class="cotainer">
+    @foreach (var el in Model.cart.listItems)
+    {
+        <div class="alert alert-warning mt-3">
+            <b>Книга:</b>@el.book.Name <br />
+            
+        </div>
+    }
+    <hr />
+    <div class="btn btn-danger" asp-controller="Order">Забронировать</div>
+</div>

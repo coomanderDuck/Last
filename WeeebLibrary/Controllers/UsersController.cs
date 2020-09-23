@@ -27,7 +27,7 @@ namespace WeeebLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, SecondName = model.SecondName };
+                User user = new User { Email = model.Email, UserName = model.Email, Name = model.Name, SecondName = model.SecondName, Phone = model.Phone };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

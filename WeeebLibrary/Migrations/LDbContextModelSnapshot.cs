@@ -8,8 +8,8 @@ using WeeebLibrary.Database;
 
 namespace WeeebLibrary.Migrations
 {
-    [DbContext(typeof(LDbContext))]
-    partial class LDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(LDBContext))]
+    partial class LDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -67,27 +67,6 @@ namespace WeeebLibrary.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IdentityUserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -201,6 +180,26 @@ namespace WeeebLibrary.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("WeeebLibrary.Database.Entitys.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("CartId")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("bookId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("bookId");
+
+                    b.ToTable("CartItem");
                 });
 
             modelBuilder.Entity("WeeebLibrary.Database.Entitys.User", b =>
@@ -325,6 +324,13 @@ namespace WeeebLibrary.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WeeebLibrary.Database.Entitys.CartItem", b =>
+                {
+                    b.HasOne("WeeebLibrary.Database.Entitys.Book", "book")
+                        .WithMany()
+                        .HasForeignKey("bookId");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,9 +14,9 @@ namespace WeeebLibrary.Controllers
 {
     public class BookController : Controller
     {
-        private readonly LDbContext _context;
+        private readonly LDBContext _context;
 
-        public BookController(LDbContext context)
+        public BookController(LDBContext context)
         {
             _context = context;
         }
@@ -46,7 +46,8 @@ namespace WeeebLibrary.Controllers
         }
 
         // GET: Book/Create
-        [Authorize(Roles = "Библиотекарь")]
+       [Authorize(Roles = "Библиотекарь")]
+        
         public IActionResult Create()
         {
             return View();

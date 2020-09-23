@@ -10,15 +10,17 @@ using System.Threading.Tasks;
 namespace WeeebLibrary.Database
 {
    
-        public class LDbContext : IdentityDbContext<User>
+        public class LDBContext : IdentityDbContext<User>
         {
         public DbSet<Book> Books { get; set; }
-        public DbSet<Microsoft.AspNetCore.Identity.IdentityUserClaim<Guid>> IdentityUserClaims { get; set; }
+        
+        public DbSet<CartItem> CartItem { get; set; }
 
-            public LDbContext(DbContextOptions<LDbContext> options)
+
+        public LDBContext(DbContextOptions<LDBContext> options)
                 : base(options)
             {
-                Database.EnsureCreated();
+              Database.Migrate();
             }
         }
     

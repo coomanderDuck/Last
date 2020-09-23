@@ -12,7 +12,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using static WeeebLibrary.Database.LDbContext;
+using static WeeebLibrary.Database.LDBContext;
+using Microsoft.AspNetCore.Http;
+using WeeebLibrary.Models;
+using WeeebLibrary.interfaces;
+using WeeebLibrary.Repository;
 
 namespace WeeebLibrary
 {
@@ -28,22 +32,24 @@ namespace WeeebLibrary
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContextPool<LDbContext>(options =>
+            services.AddDbContextPool<LDBContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole>(opts => {
             })
-                .AddEntityFrameworkStores<LDbContext>();
+                .AddEntityFrameworkStores<LDBContext>();
+            services.AddTransient<ILibraryRepository, BookRepository>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient(sp => Cart.GetCart(sp));
             services.AddControllersWithViews();
-
-           
-
-            
+            services.AddDistributedMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            
 
             if (env.IsDevelopment())
             {
@@ -55,6 +61,9 @@ namespace WeeebLibrary
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSession();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
