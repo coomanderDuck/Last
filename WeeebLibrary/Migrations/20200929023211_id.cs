@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WeeebLibrary.Migrations
 {
-    public partial class New : Migration
+    public partial class id : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -179,18 +179,45 @@ namespace WeeebLibrary.Migrations
                 name: "CartItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     bookId = table.Column<int>(nullable: true),
                     CartId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartItem", x => x.Id);
+                    table.PrimaryKey("PK_CartItem", x => x.id);
                     table.ForeignKey(
                         name: "FK_CartItem_Books_bookId",
                         column: x => x.bookId,
                         principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    OrderId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BookId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    OrderTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_Order_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Order_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -236,6 +263,16 @@ namespace WeeebLibrary.Migrations
                 name: "IX_CartItem_bookId",
                 table: "CartItem",
                 column: "bookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_BookId",
+                table: "Order",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_UserId",
+                table: "Order",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -259,13 +296,16 @@ namespace WeeebLibrary.Migrations
                 name: "CartItem");
 
             migrationBuilder.DropTable(
+                name: "Order");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Books");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "AspNetUsers");
         }
     }
 }

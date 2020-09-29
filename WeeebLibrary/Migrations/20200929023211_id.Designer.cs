@@ -10,8 +10,8 @@ using WeeebLibrary.Database;
 namespace WeeebLibrary.Migrations
 {
     [DbContext(typeof(LDBContext))]
-    [Migration("20200923221121_New")]
-    partial class New
+    [Migration("20200929023211_id")]
+    partial class id
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -186,7 +186,7 @@ namespace WeeebLibrary.Migrations
 
             modelBuilder.Entity("WeeebLibrary.Database.Entitys.CartItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -197,11 +197,36 @@ namespace WeeebLibrary.Migrations
                     b.Property<int?>("bookId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
                     b.HasIndex("bookId");
 
                     b.ToTable("CartItem");
+                });
+
+            modelBuilder.Entity("WeeebLibrary.Database.Entitys.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("OrderTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("WeeebLibrary.Database.Entitys.User", b =>
@@ -333,6 +358,19 @@ namespace WeeebLibrary.Migrations
                     b.HasOne("WeeebLibrary.Database.Entitys.Book", "book")
                         .WithMany()
                         .HasForeignKey("bookId");
+                });
+
+            modelBuilder.Entity("WeeebLibrary.Database.Entitys.Order", b =>
+                {
+                    b.HasOne("WeeebLibrary.Database.Entitys.Book", "book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WeeebLibrary.Database.Entitys.User", "user")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

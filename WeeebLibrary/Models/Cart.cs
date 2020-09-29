@@ -44,7 +44,7 @@ namespace WeeebLibrary.Models
             lDbContext.SaveChanges();
         }
 
-        public List<CartItem> getClinicItems()
+        public List<CartItem> getItems()
         {
             return lDbContext.CartItem.Where(c => c.CartId == CartId).Include(s => s.book).ToList();
         }

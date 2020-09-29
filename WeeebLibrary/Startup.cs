@@ -39,6 +39,7 @@ namespace WeeebLibrary
             })
                 .AddEntityFrameworkStores<LDBContext>();
             services.AddTransient<ILibraryRepository, BookRepository>();
+            services.AddTransient<IOrderRepositiry, OrderRepositiry>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient(sp => Cart.GetCart(sp));
             services.AddControllersWithViews();

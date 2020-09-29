@@ -22,7 +22,7 @@ namespace WeeebLibrary.Controllers
 
         public ViewResult Index()
         {
-            var items = _cart.getClinicItems();
+            var items = _cart.getItems();
             _cart.listItems = items;
 
             var obj = new CartViewModel

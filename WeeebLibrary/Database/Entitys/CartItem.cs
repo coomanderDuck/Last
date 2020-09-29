@@ -7,7 +7,8 @@ namespace WeeebLibrary.Database.Entitys
 {
     public class CartItem
     {
-        public int Id { get; set; }
+        public int id { get; set; }
+
         public Book book { get; set; }
        
 
