@@ -10,7 +10,7 @@ namespace WeeebLibrary.interfaces
     {
         IEnumerable<Book> Books { get; }
 
-
+        IEnumerable<Book> GetBooks { get; }
         Book getObjectBook(int bookId);
     }
 }

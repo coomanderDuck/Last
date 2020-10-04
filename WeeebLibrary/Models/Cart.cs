@@ -19,7 +19,7 @@ namespace WeeebLibrary.Models
         }
         public string CartId { get; set; }
 
-        public List<CartItem> listItems { get; set; }
+        public List<CartItem> ListItems { get; set; }
 
         public static Cart GetCart(IServiceProvider books)
         {
@@ -44,7 +44,7 @@ namespace WeeebLibrary.Models
             lDbContext.SaveChanges();
         }
 
-        public List<CartItem> getItems()
+        public List<CartItem> GetItems()
         {
             return lDbContext.CartItem.Where(c => c.CartId == CartId).Include(s => s.book).ToList();
         }

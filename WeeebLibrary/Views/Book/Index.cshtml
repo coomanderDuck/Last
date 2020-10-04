@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WeeebLibrary.Database.Entitys.Book>
+﻿@model WeeebLibrary.Models.BookGenreViewModel
 
 
 @{
@@ -13,6 +13,17 @@
         <a asp-action="Create" asp-controller="Book">Добавить книгу</a>
     </p>
 }
+
+<form asp-controller="Book" asp-action="Index" method="get">
+    <p>
+        Жанр:<select asp-for="BookGenre" asp-items="Model.Genres">
+            <option value="">Любой жанр</option>
+        </select>
+        Название:<input type="text" name="SearchString">
+        <input type="submit" value="Найти" />
+    </p>
+</form>
+
 <table class="lead">
     <thead>
         <tr>
@@ -32,7 +43,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Books)
         {
             <tr>
                 <td>

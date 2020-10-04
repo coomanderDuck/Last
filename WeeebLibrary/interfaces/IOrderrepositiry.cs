@@ -8,6 +8,6 @@ namespace WeeebLibrary.interfaces
 {
     public interface IOrderRepositiry
     {
-        void createOrder(User user);
+        void CreateOrder(User user);
     }
 }

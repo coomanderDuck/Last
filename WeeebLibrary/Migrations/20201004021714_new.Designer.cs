@@ -10,8 +10,8 @@ using WeeebLibrary.Database;
 namespace WeeebLibrary.Migrations
 {
     [DbContext(typeof(LDBContext))]
-    [Migration("20200929023211_id")]
-    partial class id
+    [Migration("20201004021714_new")]
+    partial class @new
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -161,8 +161,8 @@ namespace WeeebLibrary.Migrations
                     b.Property<string>("Autor")
                         .HasColumnType("text");
 
-                    b.Property<bool>("Available")
-                        .HasColumnType("boolean");
+                    b.Property<string>("Available")
+                        .HasColumnType("text");
 
                     b.Property<string>("Desc")
                         .HasColumnType("text");
@@ -181,7 +181,7 @@ namespace WeeebLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Book");
                 });
 
             modelBuilder.Entity("WeeebLibrary.Database.Entitys.CartItem", b =>

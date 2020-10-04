@@ -12,7 +12,7 @@ namespace WeeebLibrary.Database
    
         public class LDBContext : IdentityDbContext<User>
         {
-        public DbSet<Book> Books { get; set; }
+        public DbSet<Book> Book { get; set; }
         
         public DbSet<CartItem> CartItem { get; set; }
         public DbSet<Order> Order { get; set; }
@@ -21,7 +21,7 @@ namespace WeeebLibrary.Database
         public LDBContext(DbContextOptions<LDBContext> options)
                 : base(options)
             {
-             Database.Migrate();
+             //Database.Migrate();
             }
         }
     

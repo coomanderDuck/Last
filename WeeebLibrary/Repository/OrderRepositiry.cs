@@ -18,10 +18,10 @@ namespace WeeebLibrary.Repository
             this.cart = cart;
 
         }
-        public void createOrder(User user)
+        public void CreateOrder(User user)
         {
-            cart.listItems = cart.getItems();
-            var items = cart.listItems;
+            cart.ListItems = cart.GetItems();
+            var items = cart.ListItems;
             foreach (var el in items)
             {
                 var order = new Order()

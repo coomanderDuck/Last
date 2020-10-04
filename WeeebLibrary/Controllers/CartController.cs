@@ -22,8 +22,8 @@ namespace WeeebLibrary.Controllers
 
         public ViewResult Index()
         {
-            var items = _cart.getItems();
-            _cart.listItems = items;
+            var items = _cart.GetItems();
+            _cart.ListItems = items;
 
             var obj = new CartViewModel
             {

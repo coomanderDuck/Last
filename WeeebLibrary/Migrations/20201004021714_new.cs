@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WeeebLibrary.Migrations
 {
-    public partial class id : Migration
+    public partial class @new : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,7 +51,7 @@ namespace WeeebLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "Book",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -62,11 +62,11 @@ namespace WeeebLibrary.Migrations
                     Publisher = table.Column<string>(nullable: true),
                     Desc = table.Column<string>(nullable: true),
                     img = table.Column<string>(nullable: true),
-                    Available = table.Column<bool>(nullable: false)
+                    Available = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_Book", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -188,9 +188,9 @@ namespace WeeebLibrary.Migrations
                 {
                     table.PrimaryKey("PK_CartItem", x => x.id);
                     table.ForeignKey(
-                        name: "FK_CartItem_Books_bookId",
+                        name: "FK_CartItem_Book_bookId",
                         column: x => x.bookId,
-                        principalTable: "Books",
+                        principalTable: "Book",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -209,9 +209,9 @@ namespace WeeebLibrary.Migrations
                 {
                     table.PrimaryKey("PK_Order", x => x.OrderId);
                     table.ForeignKey(
-                        name: "FK_Order_Books_BookId",
+                        name: "FK_Order_Book_BookId",
                         column: x => x.BookId,
-                        principalTable: "Books",
+                        principalTable: "Book",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -302,7 +302,7 @@ namespace WeeebLibrary.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Book");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

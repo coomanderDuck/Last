@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WeeebLibrary.Database;
 using WeeebLibrary.Database.Entitys;
-
+using WeeebLibrary.Models;
 
 namespace WeeebLibrary.Controllers
 {
@@ -22,9 +22,32 @@ namespace WeeebLibrary.Controllers
         }
 
         // GET: Book
-        public async Task<IActionResult> Index()
+
+      
+        public async Task<IActionResult> Index(string searchString, string bookGenre)
         {
-            return View(await _context.Books.ToListAsync());
+            IQueryable<string> genreQuery = from m in _context.Book
+                                            orderby m.Genre
+                                            select m.Genre;
+
+            var books = from m in _context.Book
+                         select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Name.Contains(searchString));
+            }
+            if (!string.IsNullOrEmpty(bookGenre))
+            {
+                books = books.Where(x => x.Genre == bookGenre);
+            }
+            var bookGenreVM = new BookGenreViewModel
+            {
+                Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Books = await books.ToListAsync()
+            };
+
+            return View(bookGenreVM);
         }
 
         // GET: Book/Details/5
@@ -35,7 +58,7 @@ namespace WeeebLibrary.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books
+            var book = await _context.Book
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
@@ -78,7 +101,7 @@ namespace WeeebLibrary.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books.FindAsync(id);
+            var book = await _context.Book.FindAsync(id);
             if (book == null)
             {
                 return NotFound();
@@ -130,7 +153,7 @@ namespace WeeebLibrary.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books
+            var book = await _context.Book
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
@@ -145,15 +168,15 @@ namespace WeeebLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await _context.Books.FindAsync(id);
-            _context.Books.Remove(book);
+            var book = await _context.Book.FindAsync(id);
+            _context.Book.Remove(book);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BookExists(int id)
         {
-            return _context.Books.Any(e => e.Id == id);
+            return _context.Book.Any(e => e.Id == id);
         }
     }
 }

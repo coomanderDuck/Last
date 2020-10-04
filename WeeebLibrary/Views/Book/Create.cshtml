@@ -38,12 +38,17 @@
                 <input asp-for="Desc" class="form-control" />
                 <span asp-validation-for="Desc" class="text-danger"></span>
             </div>
-            
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Available" /> @Html.DisplayNameFor(model => model.Available)
-                </label>
+            <div class="form-group">
+                <label asp-for="Available" class="control-label"></label>
+                <input asp-for="Available" class="form-control" />
+                <span asp-validation-for="Available" class="text-danger"></span>
             </div>
+
+            <!--<div class="form-group form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" asp-for="Available" /> @Html.DisplayNameFor(model => model.Available)
+        </label>
+    </div>-->
             <div class="form-group">
                 <input type="submit" value="Добавить" class="btn btn-primary" />
             </div>

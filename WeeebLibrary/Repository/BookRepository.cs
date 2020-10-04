@@ -18,11 +18,11 @@ namespace WeeebLibrary.Repository
             this.lDBContext = lDBContext;
         }
 
-        public IEnumerable<Book> Books => lDBContext.Books;
+        public IEnumerable<Book> Books => lDBContext.Book;
 
+        public IEnumerable<Book> GetBooks => lDBContext.Book.Where(p => p.Available.Contains("Available"));
 
-
-        public Book getObjectBook(int bookId) => lDBContext.Books.FirstOrDefault(p => p.Id == bookId);
+        public Book getObjectBook(int bookId) => lDBContext.Book.FirstOrDefault(p => p.Id == bookId);
     }
 }
 

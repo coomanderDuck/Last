@@ -159,8 +159,8 @@ namespace WeeebLibrary.Migrations
                     b.Property<string>("Autor")
                         .HasColumnType("text");
 
-                    b.Property<bool>("Available")
-                        .HasColumnType("boolean");
+                    b.Property<string>("Available")
+                        .HasColumnType("text");
 
                     b.Property<string>("Desc")
                         .HasColumnType("text");
@@ -179,7 +179,7 @@ namespace WeeebLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Book");
                 });
 
             modelBuilder.Entity("WeeebLibrary.Database.Entitys.CartItem", b =>

@@ -26,8 +26,8 @@ namespace WeeebLibrary.Controllers
         
         public  IActionResult Checkout()
         {
-            cart.listItems = cart.getItems();
-            if (cart.listItems.Count == 0)
+            cart.ListItems = cart.GetItems();
+            if (cart.ListItems.Count == 0)
             {
                 ModelState.AddModelError("", "Вы не выбрали услугу!");
             }
@@ -35,7 +35,7 @@ namespace WeeebLibrary.Controllers
             if (ModelState.IsValid)
             {
                 var user = userManager.FindByNameAsync(User.Identity.Name).Result;
-                orderRepositiry.createOrder(user);
+                orderRepositiry.CreateOrder(user);
                 return RedirectToAction("Complete");
             }
             return View();
