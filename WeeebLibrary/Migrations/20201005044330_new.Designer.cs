@@ -10,7 +10,7 @@ using WeeebLibrary.Database;
 namespace WeeebLibrary.Migrations
 {
     [DbContext(typeof(LDBContext))]
-    [Migration("20201004021714_new")]
+    [Migration("20201005044330_new")]
     partial class @new
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,9 +161,6 @@ namespace WeeebLibrary.Migrations
                     b.Property<string>("Autor")
                         .HasColumnType("text");
 
-                    b.Property<string>("Available")
-                        .HasColumnType("text");
-
                     b.Property<string>("Desc")
                         .HasColumnType("text");
 
@@ -175,6 +172,9 @@ namespace WeeebLibrary.Migrations
 
                     b.Property<string>("Publisher")
                         .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("img")
                         .HasColumnType("text");

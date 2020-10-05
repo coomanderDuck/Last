@@ -62,7 +62,7 @@ namespace WeeebLibrary.Migrations
                     Publisher = table.Column<string>(nullable: true),
                     Desc = table.Column<string>(nullable: true),
                     img = table.Column<string>(nullable: true),
-                    Available = table.Column<string>(nullable: true)
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

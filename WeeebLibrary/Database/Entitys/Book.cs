@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using WeeebLibrary.Enums;
 
 namespace WeeebLibrary.Database.Entitys
 {
@@ -14,8 +11,8 @@ namespace WeeebLibrary.Database.Entitys
         public string Publisher { get; set; }
         public string Desc { set; get; }
         public string img { set; get; }
-        public string Available { set; get; }
-       
+        public Status Status { set; get; }
+
 
     }
 }

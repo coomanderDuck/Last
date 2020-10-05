@@ -30,6 +30,8 @@ namespace WeeebLibrary.Repository
                     OrderTime = DateTime.Now,
                     UserId = user.Id
                 };
+                el.book.Status = Enums.Status.Booked;
+
                 lDBContext.Order.Add(order);
             }
             lDBContext.SaveChanges();

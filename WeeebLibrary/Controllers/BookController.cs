@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using WeeebLibrary.Database;
 using WeeebLibrary.Database.Entitys;
+using WeeebLibrary.Enums;
 using WeeebLibrary.Models;
 
 namespace WeeebLibrary.Controllers
@@ -23,7 +24,7 @@ namespace WeeebLibrary.Controllers
 
         // GET: Book
 
-      
+
         public async Task<IActionResult> Index(string searchString, string bookGenre)
         {
             IQueryable<string> genreQuery = from m in _context.Book
@@ -31,7 +32,8 @@ namespace WeeebLibrary.Controllers
                                             select m.Genre;
 
             var books = from m in _context.Book
-                         select m;
+                        select m;
+           books = books.Where(s => s.Status==Status.Available);
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -69,8 +71,8 @@ namespace WeeebLibrary.Controllers
         }
 
         // GET: Book/Create
-       [Authorize(Roles = "Библиотекарь")]
-        
+        [Authorize(Roles = "Библиотекарь")]
+
         public IActionResult Create()
         {
             return View();
@@ -81,7 +83,7 @@ namespace WeeebLibrary.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Autor,Genre,Publisher,Desc,img,Available")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Name,Autor,Genre,Publisher,Desc,img,Status")] Book book)
         {
             if (ModelState.IsValid)
             {

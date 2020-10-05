@@ -39,12 +39,11 @@
                 <input asp-for="Desc" class="form-control" />
                 <span asp-validation-for="Desc" class="text-danger"></span>
             </div>
-            
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Available" /> @Html.DisplayNameFor(model => model.Available)
-                </label>
-            </div>
+            <select asp-for="Status">
+                <option value="Available">Доступно</option>
+                <option value="Booked">Забронировано</option>
+                <option value="Taked">Выдана</option>
+            </select>
             <div class="form-group">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>

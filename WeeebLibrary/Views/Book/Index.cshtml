@@ -15,11 +15,11 @@
 }
 
 <form asp-controller="Book" asp-action="Index" method="get">
-    <p>
-        Жанр:<select asp-for="BookGenre" asp-items="Model.Genres">
+    <p >
+        Жанр:<select asp-for="BookGenre" asp-items="Model.Genres"  >
             <option value="">Любой жанр</option>
         </select>
-        Название:<input type="text" name="SearchString">
+        Название:<input type="text" name="SearchString"  >
         <input type="submit" value="Найти" />
     </p>
 </form>

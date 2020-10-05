@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WeeebLibrary.Database;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using WeeebLibrary.Database.Entitys;
 using WeeebLibrary.Models;
 
@@ -30,7 +26,7 @@ namespace WeeebLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, Name = model.Name, SecondName = model.SecondName, Phone = model.Phone};
+                User user = new User { Email = model.Email, UserName = model.Email, Name = model.Name, SecondName = model.SecondName, Phone = model.Phone };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

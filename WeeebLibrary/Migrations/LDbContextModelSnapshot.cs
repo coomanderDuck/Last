@@ -159,9 +159,6 @@ namespace WeeebLibrary.Migrations
                     b.Property<string>("Autor")
                         .HasColumnType("text");
 
-                    b.Property<string>("Available")
-                        .HasColumnType("text");
-
                     b.Property<string>("Desc")
                         .HasColumnType("text");
 
@@ -173,6 +170,9 @@ namespace WeeebLibrary.Migrations
 
                     b.Property<string>("Publisher")
                         .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("img")
                         .HasColumnType("text");
