@@ -25,27 +25,44 @@ namespace WeeebLibrary.Controllers
         // GET: Book
 
 
-        public async Task<IActionResult> Index(string searchString, string bookGenre)
+        public async Task<IActionResult> Index(string searchString, string bookAutor, string bookGenre, string bookPublisher)
         {
+            IQueryable<string> autorQuery = from m in _context.Book
+                                            orderby m.Autor
+                                            select m.Autor;
             IQueryable<string> genreQuery = from m in _context.Book
                                             orderby m.Genre
                                             select m.Genre;
+            IQueryable<string> publisherQuery = from m in _context.Book
+                                            orderby m.Publisher
+                                                select m.Publisher;
 
             var books = from m in _context.Book
                         select m;
-           books = books.Where(s => s.Status==Status.Available);
+        //   books = books.Where(s => s.Status==Status.Available);
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 books = books.Where(s => s.Name.Contains(searchString));
             }
+            if (!string.IsNullOrEmpty(bookAutor))
+            {
+                books = books.Where(x => x.Autor == bookAutor);
+            }
             if (!string.IsNullOrEmpty(bookGenre))
             {
                 books = books.Where(x => x.Genre == bookGenre);
             }
+            if (!string.IsNullOrEmpty(bookPublisher))
+            {
+                books = books.Where(x => x.Publisher == bookPublisher);
+            }
+           
             var bookGenreVM = new BookGenreViewModel
             {
+                Autor = new SelectList(await autorQuery.Distinct().ToListAsync()),
                 Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Publisher = new SelectList(await publisherQuery.Distinct().ToListAsync()),
                 Books = await books.ToListAsync()
             };
 

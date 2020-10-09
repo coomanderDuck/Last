@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WeeebLibrary.Database.Entitys;
 using WeeebLibrary.interfaces;
 using WeeebLibrary.Models;
 
@@ -35,8 +31,9 @@ namespace WeeebLibrary.Controllers
 
         public RedirectToActionResult addToCart(int id)
         {
+
             var item = _libRep.Books.FirstOrDefault(i => i.Id == id);
-            if (item != null)
+            if ((item != null) & (item.Status == Enums.Status.Available))
             {
                 _cart.AddToCart(item);
             }

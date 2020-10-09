@@ -3,7 +3,7 @@
     @foreach (var el in Model.cart.ListItems)
     {
         <div class="alert alert-warning mt-3">
-            <b>Книга:</b>@el.book.Name <br />
+            <b><a asp-controller="Book" asp-action="Details" asp-route-id="@el.book.Id">@el.book.Name</a></b> <br />
             
         </div>
     }
