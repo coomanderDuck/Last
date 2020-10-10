@@ -23,7 +23,9 @@ namespace WeeebLibrary.Database.Entitys
         public string Desc { set; get; }
 
         [Display(Name = "Обложка")]
-        public string img { set; get; }
+        public string Img { set; get; }
+
+        public string ImgPath { get; set; }
 
         [Display(Name = "Статус")]
         public Status Status { set; get; }

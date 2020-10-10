@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WeeebLibrary.Migrations
 {
-    public partial class @new : Migration
+    public partial class New : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -176,26 +176,6 @@ namespace WeeebLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CartItem",
-                columns: table => new
-                {
-                    id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    bookId = table.Column<int>(nullable: true),
-                    CartId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CartItem", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_CartItem_Book_bookId",
-                        column: x => x.bookId,
-                        principalTable: "Book",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Order",
                 columns: table => new
                 {
@@ -260,11 +240,6 @@ namespace WeeebLibrary.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartItem_bookId",
-                table: "CartItem",
-                column: "bookId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Order_BookId",
                 table: "Order",
                 column: "BookId");
@@ -291,9 +266,6 @@ namespace WeeebLibrary.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "CartItem");
 
             migrationBuilder.DropTable(
                 name: "Order");

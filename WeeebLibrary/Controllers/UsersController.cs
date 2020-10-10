@@ -11,14 +11,14 @@ namespace WeeebLibrary.Controllers
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
-        UserManager<User> _userManager;
+        UserManager<User> userManager;
 
         public UsersController(UserManager<User> userManager)
         {
-            _userManager = userManager;
+            this.userManager = userManager;
         }
 
-        public IActionResult Index() => View(_userManager.Users.ToList());
+        public IActionResult Index() => View(userManager.Users.ToList());
 
         public IActionResult Create() => View();
 
@@ -28,10 +28,10 @@ namespace WeeebLibrary.Controllers
             if (ModelState.IsValid)
             {
                 User user = new User { Email = model.Email, UserName = model.Email, Name = model.Name, SecondName = model.SecondName, Phone = model.Phone };
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Клиент");
+                    await userManager.AddToRoleAsync(user, "Клиент");
                     return RedirectToAction("Index");
                 }
                 else
@@ -47,7 +47,7 @@ namespace WeeebLibrary.Controllers
 
         public async Task<IActionResult> Edit(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            User user = await userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -61,14 +61,14 @@ namespace WeeebLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userManager.FindByIdAsync(model.Id);
+                User user = await userManager.FindByIdAsync(model.Id);
                 if (user != null)
                 {
                     user.Email = model.Email;
                     user.UserName = model.Email;
                     user.SecondName = model.SecondName;
 
-                    var result = await _userManager.UpdateAsync(user);
+                    var result = await userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Index");
@@ -88,17 +88,17 @@ namespace WeeebLibrary.Controllers
         [HttpPost]
         public async Task<ActionResult> Delete(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            User user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
-                IdentityResult result = await _userManager.DeleteAsync(user);
+                IdentityResult result = await userManager.DeleteAsync(user);
             }
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> ChangePassword(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            User user = await userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -112,7 +112,7 @@ namespace WeeebLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userManager.FindByIdAsync(model.Id);
+                User user = await userManager.FindByIdAsync(model.Id);
                 if (user != null)
                 {
                     var _passwordValidator =
@@ -121,11 +121,11 @@ namespace WeeebLibrary.Controllers
                         HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) as IPasswordHasher<User>;
 
                     IdentityResult result =
-                        await _passwordValidator.ValidateAsync(_userManager, user, model.NewPassword);
+                        await _passwordValidator.ValidateAsync(userManager, user, model.NewPassword);
                     if (result.Succeeded)
                     {
                         user.PasswordHash = _passwordHasher.HashPassword(user, model.NewPassword);
-                        await _userManager.UpdateAsync(user);
+                        await userManager.UpdateAsync(user);
                         return RedirectToAction("Index");
                     }
                     else

@@ -76,7 +76,7 @@
                 <p>
                     @if (User.IsInRole("Клиент")&(item.Status == WeeebLibrary.Enums.Status.Available))
                     {
-                        <a asp-controller="Cart" asp-action="addToCart" asp-route-id="@item.Id">Забронировать</a>
+                        <a asp-controller="Order" asp-action="Checkout" asp-route-id="@item.Id">Забронировать</a>
                     }
 
                     @if (User.IsInRole("Библиотекарь"))

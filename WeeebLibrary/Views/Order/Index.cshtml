@@ -54,7 +54,11 @@
                     {
                         <a asp-action="Give" asp-route-id="@item.OrderId">Выдать книгу</a>
                     }
-                    @if ((User.IsInRole("Библиотекарь"))&(item.Book.Status==WeeebLibrary.Enums.Status.Taked))
+                    @if (User.IsInRole("Клиент") & (item.Book.Status == WeeebLibrary.Enums.Status.Booked))
+                    {
+                        <a asp-action="Cancel" asp-route-id="@item.OrderId">Снять бронь</a>
+                    }
+                    @if ((User.IsInRole("Библиотекарь")) & (item.Book.Status == WeeebLibrary.Enums.Status.Taked))
                     {
                         <a asp-action="Take" asp-route-id="@item.OrderId">Забрать книгу</a>
                     }

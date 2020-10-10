@@ -6,49 +6,50 @@
 }
 
     <h1>@Html.DisplayFor(model => model.Name)</h1>
-
-<div>
     
-    <hr />
-    <dl class="row">
+    <img width="300" height="500" src="@Model.ImgPath" />
+    <div>
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Autor)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Autor)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Genre)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Genre)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Publisher)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Publisher)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Desc)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Desc)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
+        <hr />
+        <dl class="row">
 
-    </dl>
-    @if ((User.IsInRole("Клиент")) & (Model.Status == WeeebLibrary.Enums.Status.Available))
-    {
-        <a asp-controller="Cart" asp-action="addToCart" asp-route-id="@Model.Id">Забронировать</a>
-    }
-</div>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Autor)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Autor)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Genre)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Genre)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Publisher)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Publisher)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Desc)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Desc)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+
+        </dl>
+        @if ((User.IsInRole("Клиент")) & (Model.Status == WeeebLibrary.Enums.Status.Available))
+        {
+            <a asp-controller="Order" asp-action="Checkout" asp-route-id="@Model.Id">Забронировать</a>
+        }
+    </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Изменить</a> |
     <a asp-action="Index">Вернуться к списку книг</a>

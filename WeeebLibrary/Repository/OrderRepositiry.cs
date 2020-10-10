@@ -16,42 +16,32 @@ namespace WeeebLibrary.Repository
     public class OrderRepositiry : IOrderRepositiry
     {
         private readonly LDBContext lDBContext;
-        private readonly Cart cart;
         private readonly UserManager<User> userManager;
 
 
-        public OrderRepositiry(LDBContext lDBContext, Cart cart, UserManager<User> userManager)
+        public OrderRepositiry(LDBContext lDBContext, UserManager<User> userManager)
         {
             this.lDBContext = lDBContext;
-            this.cart = cart;
+
             this.userManager = userManager;
         }
-        public void CreateOrder(User user)
+        public void CreateOrder(User user, Book book)
         {
-
-            
-            
-            cart.ListItems = cart.GetItems();
-            var items = cart.ListItems;
-            foreach (var el in items)
+            var order = new Order()
             {
-                var order = new Order()
-                {
-                    BookId = el.book.Id,
-                    OrderTime = DateTime.Now,
-                    UserId = user.Id
-                };
-                el.book.Status = Enums.Status.Booked;
-                lDBContext.Order.Add(order);
-            }
-            //cart.ListItems.Clear();
+                BookId = book.Id,
+                OrderTime = DateTime.Now,
+                UserId = user.Id
+            };
+            book.Status = Enums.Status.Booked;
+            lDBContext.Order.Add(order);
             lDBContext.SaveChanges();
         }
         public void GiveBook(Book book)
         {
             book.Status = Enums.Status.Taked;
             lDBContext.Update(book);
-            
+
         }
         public void TakeBook(Book book)
         {

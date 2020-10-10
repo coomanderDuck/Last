@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WeeebLibrary.Database;
@@ -9,9 +10,10 @@ using WeeebLibrary.Database;
 namespace WeeebLibrary.Migrations
 {
     [DbContext(typeof(LDBContext))]
-    partial class LDBContextModelSnapshot : ModelSnapshot
+    [Migration("20201009180405_New")]
+    partial class New
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,12 +167,6 @@ namespace WeeebLibrary.Migrations
                     b.Property<string>("Genre")
                         .HasColumnType("text");
 
-                    b.Property<string>("Img")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ImgPath")
-                        .HasColumnType("text");
-
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -179,6 +175,9 @@ namespace WeeebLibrary.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
+
+                    b.Property<string>("img")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

@@ -6,13 +6,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <h1>Добавьте книгу</h1>
+<h1>Добавьте книгу</h1>
 
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -44,8 +44,10 @@
                 <select asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()" class="form-control"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-
-         
+            <div class="form-group">
+                <label class="control-label">Обложка</label>
+                <input type="file" name="uploadedFile" /><br>
+            </div>
 
             <div class="form-group">
                 <input type="submit" value="Добавить" class="btn btn-primary" />

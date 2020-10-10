@@ -10,8 +10,8 @@ using WeeebLibrary.Database;
 namespace WeeebLibrary.Migrations
 {
     [DbContext(typeof(LDBContext))]
-    [Migration("20201005044330_new")]
-    partial class @new
+    [Migration("20201010141134_img")]
+    partial class img
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -167,6 +167,12 @@ namespace WeeebLibrary.Migrations
                     b.Property<string>("Genre")
                         .HasColumnType("text");
 
+                    b.Property<string>("Img")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImgPath")
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -176,32 +182,9 @@ namespace WeeebLibrary.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<string>("img")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.ToTable("Book");
-                });
-
-            modelBuilder.Entity("WeeebLibrary.Database.Entitys.CartItem", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("CartId")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("bookId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("bookId");
-
-                    b.ToTable("CartItem");
                 });
 
             modelBuilder.Entity("WeeebLibrary.Database.Entitys.Order", b =>
@@ -353,22 +336,15 @@ namespace WeeebLibrary.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WeeebLibrary.Database.Entitys.CartItem", b =>
-                {
-                    b.HasOne("WeeebLibrary.Database.Entitys.Book", "book")
-                        .WithMany()
-                        .HasForeignKey("bookId");
-                });
-
             modelBuilder.Entity("WeeebLibrary.Database.Entitys.Order", b =>
                 {
-                    b.HasOne("WeeebLibrary.Database.Entitys.Book", "book")
+                    b.HasOne("WeeebLibrary.Database.Entitys.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WeeebLibrary.Database.Entitys.User", "user")
+                    b.HasOne("WeeebLibrary.Database.Entitys.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });

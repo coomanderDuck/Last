@@ -8,7 +8,7 @@ namespace WeeebLibrary.interfaces
 {
     public interface IOrderRepositiry
     {
-        void CreateOrder(User user);
+        void CreateOrder(User user, Book book);
         void GiveBook(Book book);
         void TakeBook(Book book);
         IEnumerable<Order> Orders { get; }

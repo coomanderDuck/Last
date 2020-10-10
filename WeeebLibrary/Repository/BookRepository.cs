@@ -10,7 +10,7 @@ using WeeebLibrary.interfaces;
 
 namespace WeeebLibrary.Repository
 {
-    public class BookRepository : ILibraryRepository
+    public class BookRepository : IBookRepository
     {
         private readonly LDBContext lDBContext;
 
@@ -21,9 +21,7 @@ namespace WeeebLibrary.Repository
 
         public IEnumerable<Book> Books => lDBContext.Book;
 
-        public IEnumerable<Book> GetBooks => lDBContext.Book.Where(p => p.Status == Status.Available);
-
-        public Book getObjectBook(int bookId) => lDBContext.Book.FirstOrDefault(p => p.Id == bookId);
+     
     }
 }
 

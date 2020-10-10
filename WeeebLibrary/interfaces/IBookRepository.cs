@@ -6,11 +6,10 @@ using WeeebLibrary.Database.Entitys;
 
 namespace WeeebLibrary.interfaces
 {
-    public interface ILibraryRepository
+    public interface IBookRepository
     {
         IEnumerable<Book> Books { get; }
 
-        IEnumerable<Book> GetBooks { get; }
-        Book getObjectBook(int bookId);
+
     }
 }

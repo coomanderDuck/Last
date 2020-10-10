@@ -12,45 +12,40 @@ namespace WeeebLibrary.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly IOrderRepositiry orderRepositiry;
-        private readonly Cart cart;
+        private readonly IBookRepository bookRepositiry;
+        private readonly IOrderRepositiry orderRepositiry;       
         private readonly UserManager<User> userManager;
         private readonly LDBContext lDBContext;
-
-        public OrderController(IOrderRepositiry orderRepositiry, Cart cart, UserManager<User> userManager, LDBContext context)
+        public OrderController(IOrderRepositiry orderRepositiry, IBookRepository bookRepositiry, UserManager<User> userManager, LDBContext context)
         {
+            this.bookRepositiry = bookRepositiry;
             this.orderRepositiry = orderRepositiry;
-            this.cart = cart;
             this.userManager = userManager;
             this.lDBContext = context;
 
         }
-
-
-        public IActionResult Checkout()
+        public IActionResult Checkout(int id)
         {
-            cart.ListItems = cart.GetItems();
-            if (cart.ListItems.Count == 0)
-            {
-                ModelState.AddModelError("", "Вы не выбрали услугу!");
-            }
+            var book = bookRepositiry.Books.FirstOrDefault(i => i.Id == id);
 
-            if (ModelState.IsValid)
+            if ((book != null) & (book.Status == Enums.Status.Available))
             {
                 var user = userManager.FindByNameAsync(User.Identity.Name).Result;
-                orderRepositiry.CreateOrder(user);
+                orderRepositiry.CreateOrder(user, book);
                 return RedirectToAction("Complete");
             }
             return View();
-
-
         }
         public IActionResult Complete()
         {
             ViewBag.Message = "Бронь прошла успешно. Ждём вас в нашей библиотеке!";
             return View();
         }
-
+        public IActionResult Empty()
+        {
+            ViewBag.Message = "У вас пока нет забронированных книг";
+            return View();
+        }
         public IActionResult Index()
         {
             IEnumerable<Order> Orders = null;
@@ -58,10 +53,13 @@ namespace WeeebLibrary.Controllers
             if (User.IsInRole("Клиент"))
             {
                 var user = userManager.FindByNameAsync(User.Identity.Name).Result;
-
                 Orders = Orders.Where(s => s.UserId.Contains(user.Id));
             }
-            return View(Orders);
+            if (Orders.Count() == 0)
+            {
+                return RedirectToAction("Empty");
+            }
+                return View(Orders);
         }
         public async Task<IActionResult> Give(int? id)
         {
@@ -70,7 +68,6 @@ namespace WeeebLibrary.Controllers
             orderRepositiry.GiveBook(book);
             await lDBContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-
         }
         public async Task<IActionResult> Take(int? id)
         {
@@ -79,8 +76,13 @@ namespace WeeebLibrary.Controllers
             orderRepositiry.TakeBook(book);
             lDBContext.Order.Remove(order);
             await lDBContext.SaveChangesAsync();
-
-
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Cancel(int? id)
+        {
+            var order = await lDBContext.Order.FindAsync(id);
+            lDBContext.Order.Remove(order);
+            await lDBContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }
