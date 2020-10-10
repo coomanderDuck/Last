@@ -11,25 +11,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using WeeebLibrary.Database;
 using WeeebLibrary.Database.Entitys;
+using WeeebLibrary.interfaces;
 using WeeebLibrary.Models;
 namespace WeeebLibrary.Controllers
 {
     public class BookController : Controller
     {
+        private readonly IBookRepository bookRepositiry;
         private readonly LDBContext lDBContext;
         IWebHostEnvironment appEnvironment;
 
-        public BookController(LDBContext lDBContext, IWebHostEnvironment appEnvironment)
+        public BookController(IBookRepository bookRepositiry, LDBContext lDBContext, IWebHostEnvironment appEnvironment)
         {
             this.lDBContext = lDBContext;
             this.appEnvironment = appEnvironment;
+            this.bookRepositiry = bookRepositiry;
         }
-
-        // GET: Book
-
 
         public async Task<IActionResult> Index(string searchString, string bookAutor, string bookGenre, string bookPublisher)
         {
+            //Фильтрация
             IQueryable<string> autorQuery = from m in lDBContext.Book
                                             orderby m.Autor
                                             select m.Autor;
@@ -70,36 +71,19 @@ namespace WeeebLibrary.Controllers
 
             return View(bookGenreVM);
         }
-
-        // GET: Book/Details/5
-        public async Task<IActionResult> Details(int? id)
+        //Страница книги
+        public IActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var book = await lDBContext.Book
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-
+            var book = bookRepositiry.GetBook(id);
             return View(book);
         }
-
-        // GET: Book/Create
+        //Создание книги
         [Authorize(Roles = "Библиотекарь")]
-
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Book/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Autor,Genre,Publisher,Desc,Img,ImgPath,Status")] Book book, IFormFile uploadedFile)
@@ -122,7 +106,7 @@ namespace WeeebLibrary.Controllers
             return View(book);
         }
 
-        // GET: Book/Edit/5
+        // Изменение книги
         [Authorize(Roles = "Библиотекарь")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -139,9 +123,6 @@ namespace WeeebLibrary.Controllers
             return View(book);
         }
 
-        // POST: Book/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Autor,Genre,Publisher,Desc,Img,ImgPath,Status")] Book book, IFormFile uploadedFile)
@@ -164,8 +145,7 @@ namespace WeeebLibrary.Controllers
                     }
                     book.Img = uploadedFile.FileName;
                     book.ImgPath = path;
-                    lDBContext.Update(book);
-                    await lDBContext.SaveChangesAsync();
+                    await bookRepositiry.UpdateBookAsync(book);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -183,17 +163,16 @@ namespace WeeebLibrary.Controllers
             return View(book);
         }
 
-        // GET: Book/Delete/5
+        //Удаление книги
         [Authorize(Roles = "Библиотекарь")]
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var book = await lDBContext.Book
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var book = bookRepositiry.GetBook(id);
             if (book == null)
             {
                 return NotFound();
@@ -202,14 +181,12 @@ namespace WeeebLibrary.Controllers
             return View(book);
         }
 
-        // POST: Book/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var book = await lDBContext.Book.FindAsync(id);
-            lDBContext.Book.Remove(book);
-            await lDBContext.SaveChangesAsync();
+            await bookRepositiry.DeleteBookAsync(book);
             return RedirectToAction(nameof(Index));
         }
 
@@ -217,8 +194,5 @@ namespace WeeebLibrary.Controllers
         {
             return lDBContext.Book.Any(e => e.Id == id);
         }
-
-
-
     }
 }

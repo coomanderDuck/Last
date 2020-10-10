@@ -10,6 +10,8 @@ namespace WeeebLibrary.interfaces
     {
         IEnumerable<Book> Books { get; }
 
-
+        Book GetBook(int? bookId);
+        Task UpdateBookAsync(Book book);
+        Task DeleteBookAsync(Book book);
     }
 }

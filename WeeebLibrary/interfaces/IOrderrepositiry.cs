@@ -10,7 +10,8 @@ namespace WeeebLibrary.interfaces
     {
         void CreateOrder(User user, Book book);
         void GiveBook(Book book);
-        void TakeBook(Book book);
+        void TakeBook(Book book, Order order);
+        void DeleteOrder(Order order);
         IEnumerable<Order> Orders { get; }
     }
 }

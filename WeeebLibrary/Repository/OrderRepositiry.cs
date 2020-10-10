@@ -41,16 +41,19 @@ namespace WeeebLibrary.Repository
         {
             book.Status = Enums.Status.Taked;
             lDBContext.Update(book);
-
+            lDBContext.SaveChanges();
         }
-        public void TakeBook(Book book)
+        public void TakeBook(Book book, Order order)
         {
             book.Status = Enums.Status.Available;
             lDBContext.Update(book);
-
+            DeleteOrder(order);
         }
-
-
+        public void DeleteOrder(Order order)
+        {
+            lDBContext.Order.Remove(order);
+            lDBContext.SaveChanges();
+        }
         public IEnumerable<Order> Orders => lDBContext.Order.Include(c => c.Book).Include(c => c.User);
     }
 }

@@ -6,22 +6,21 @@ using System.Threading.Tasks;
 using WeeebLibrary.Database;
 using WeeebLibrary.Database.Entitys;
 using WeeebLibrary.interfaces;
-using WeeebLibrary.Models;
 
 namespace WeeebLibrary.Controllers
 {
     public class OrderController : Controller
     {
         private readonly IBookRepository bookRepositiry;
-        private readonly IOrderRepositiry orderRepositiry;       
+        private readonly IOrderRepositiry orderRepositiry;
         private readonly UserManager<User> userManager;
         private readonly LDBContext lDBContext;
-        public OrderController(IOrderRepositiry orderRepositiry, IBookRepository bookRepositiry, UserManager<User> userManager, LDBContext context)
+        public OrderController(IOrderRepositiry orderRepositiry, IBookRepository bookRepositiry, UserManager<User> userManager, LDBContext lDBContext)
         {
             this.bookRepositiry = bookRepositiry;
             this.orderRepositiry = orderRepositiry;
             this.userManager = userManager;
-            this.lDBContext = context;
+            this.lDBContext = lDBContext;
 
         }
         public IActionResult Checkout(int id)
@@ -59,30 +58,26 @@ namespace WeeebLibrary.Controllers
             {
                 return RedirectToAction("Empty");
             }
-                return View(Orders);
+            return View(Orders);
         }
         public async Task<IActionResult> Give(int? id)
         {
             var order = await lDBContext.Order.FindAsync(id);
             var book = await lDBContext.Book.FindAsync(order.BookId);
             orderRepositiry.GiveBook(book);
-            await lDBContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> Take(int? id)
         {
             var order = await lDBContext.Order.FindAsync(id);
             var book = await lDBContext.Book.FindAsync(order.BookId);
-            orderRepositiry.TakeBook(book);
-            lDBContext.Order.Remove(order);
-            await lDBContext.SaveChangesAsync();
+            orderRepositiry.TakeBook(book, order);
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> Cancel(int? id)
         {
             var order = await lDBContext.Order.FindAsync(id);
-            lDBContext.Order.Remove(order);
-            await lDBContext.SaveChangesAsync();
+            orderRepositiry.DeleteOrder(order);
             return RedirectToAction(nameof(Index));
         }
     }
