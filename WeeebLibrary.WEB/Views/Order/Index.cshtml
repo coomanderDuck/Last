@@ -1,0 +1,71 @@
+﻿@model IEnumerable<WeeebLibrary.BLL.DTO.OrderDTO>
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Список брони</h1>
+<table class="lead">
+    <thead>
+        <tr>
+            <th>
+                Номер брони
+            </th>
+            <th>
+                Книга
+            </th>
+            <th>
+                Пользователь
+            </th>
+            <th>
+                Время заказа
+            </th>
+            <th>
+                Статус заказа
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.Status)
+                </td>
+
+                <td>
+
+                    @if (User.IsInRole("Библиотекарь") & (item.Book.Status == WeeebLibrary.DAL.Enums.Status.Booked))
+                    {
+                        <a asp-action="Give" asp-route-id="@item.Id">Выдать книгу</a>
+                    }
+                    @if (User.IsInRole("Клиент") & (item.Book.Status == WeeebLibrary.DAL.Enums.Status.Booked))
+                    {
+                        <a asp-action="Cancel" asp-route-id="@item.Id">Снять бронь</a>
+                    }
+                    @if ((User.IsInRole("Библиотекарь")) & (item.Book.Status == WeeebLibrary.DAL.Enums.Status.Taked))
+                    {
+                        <a asp-action="Take" asp-route-id="@item.Id">Забрать книгу</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,96 @@
+﻿@model WeeebLibrary.BLL.Models.BookGenreViewModel
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Список книг</h1>
+@if (User.IsInRole("Библиотекарь"))
+{
+    <p>
+        <a asp-action="Create" asp-controller="Book">Добавить книгу</a>
+    </p>
+}
+
+<form asp-controller="Book" asp-action="Index" method="get">
+    <p>
+        Автор:<select asp-for="BookAutor" asp-items="Model.Autor">
+            <option value="">Любой автор</option>
+        </select>
+        Жанр:<select asp-for="BookGenre" asp-items="Model.Genres">
+            <option value="">Любой жанр</option>
+        </select>     
+        Издательство:<select asp-for="BookPublisher" asp-items="Model.Publisher">
+            <option value="">Любое издательство</option>
+        </select>
+        
+        Название:<input type="text" name="SearchString">
+        <input type="submit" value="Найти" />
+    </p>
+</form>
+
+<table class="lead">
+    <thead>
+        <tr>
+            <th>
+                Название
+            </th>
+            <th>
+                Автор
+            </th>
+            <th>
+                Жанр
+            </th>
+            <th>
+                Издательство
+            </th>
+            <th>
+                Статус
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Books)
+        {
+        <tr>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</a>
+</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Autor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publisher)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+
+            <td>
+                <p>
+                    @if (User.IsInRole("Клиент")&(item.Status == WeeebLibrary.DAL.Enums.Status.Available))
+                    {
+                        <a asp-controller="Order" asp-action="Checkout" asp-route-id="@item.Id">Забронировать</a>
+                    }
+
+                    @if (User.IsInRole("Библиотекарь"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                    }
+                    
+                    @if (User.IsInRole("Библиотекарь"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                    }
+                </p>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
