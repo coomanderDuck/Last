@@ -33,6 +33,7 @@ namespace WeeebLibrary.BLL.Services
 
         public async Task RegisterUsersAsync(UserDTO userDto)
         {
+
             var user = NewUser(userDto);
             await userManager.AddToRoleAsync(user, "Клиент");
             await signInManager.SignInAsync(user, false);
@@ -47,9 +48,8 @@ namespace WeeebLibrary.BLL.Services
 
         public User NewUser(UserDTO userDto)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<UserDTO, User>()).CreateMapper();
-
-            return mapper.Map<UserDTO, User>(userDto);
+            var user = new User { Email = userDto.Email, UserName = userDto.Email, Name = userDto.Name, SecondName = userDto.SecondName, Phone = userDto.Phone };
+            return user;
         }
 
         public async Task<SignInResult> SignInUserAsync(Login model)
