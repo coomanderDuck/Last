@@ -47,10 +47,10 @@
     </dl>
     @if ((User.IsInRole("Клиент")) & (Model.Status == WeeebLibrary.DAL.Enums.Status.Available))
     {
-        <a asp-controller="Order" asp-action="Checkout" asp-route-id="@Model.Id">Забронировать</a>
+        <a class="btn btn-outline-light" asp-controller="Order" asp-action="Checkout" asp-route-id="@Model.Id">Забронировать</a>
     }
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Изменить</a> |
+    <a class="btn btn-outline-light" asp-action="Edit" asp-route-id="@Model.Id">Изменить</a> |
     <a asp-action="Index">Вернуться к списку книг</a>
 </div>

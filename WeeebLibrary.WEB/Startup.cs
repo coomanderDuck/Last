@@ -1,22 +1,20 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WeeebLibrary.BLL;
-using WeeebLibrary.BLL.RoleInitializer;
-using WeeebLibrary.BLL.Jobs;
 using Quartz;
-using Quartz.Spi;
 using Quartz.Impl;
+using Quartz.Spi;
+using WeeebLibrary.BLL;
+using WeeebLibrary.BLL.Jobs;
+using WeeebLibrary.BLL.RoleInitializer;
 
 namespace WeeebLibrary
 {
     public class Startup
     {
-        
 
         public Startup(IConfiguration configuration)
         {
@@ -50,8 +48,6 @@ namespace WeeebLibrary
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -62,6 +58,7 @@ namespace WeeebLibrary
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
@@ -74,9 +71,7 @@ namespace WeeebLibrary
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-
             await CallRoleInitializer.RoleInitializeAsync(app);
-
         }
     }
 }

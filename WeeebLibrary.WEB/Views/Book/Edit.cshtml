@@ -39,17 +39,17 @@
                 <input asp-for="Desc" class="form-control" />
                 <span asp-validation-for="Desc" class="text-danger"></span>
             </div>
-            <select asp-for="Status">
+            <select asp-for="Status" class="lead">
                 <option value="Available">Доступно</option>
                 <option value="Booked">Забронировано</option>
                 <option value="Taked">Выдана</option>
             </select>
-            <div class="form-group">
+            <div class="form-group" >
                 <label class="control-label">Обложка</label>
-                <input type="file" name="uploadedFile" /><br>
+                <input type="file" name="uploadedFile" class="lead" /><br>
             </div>
             <div class="form-group">
-                <input type="submit" value="Сохранить" class="btn btn-primary" />
+                <input  type="submit" value="Сохранить" class="btn btn-outline-light" />
             </div>
         </form>
     </div>

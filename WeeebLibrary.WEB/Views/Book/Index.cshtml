@@ -15,19 +15,21 @@
 }
 
 <form asp-controller="Book" asp-action="Index" method="get">
+    
     <p>
-        Автор:<select asp-for="BookAutor" asp-items="Model.Autor">
+        <select asp-for="BookAutor" asp-items="Model.Autor" class="lead">
             <option value="">Любой автор</option>
         </select>
-        Жанр:<select asp-for="BookGenre" asp-items="Model.Genres">
+        <select asp-for="BookGenre" asp-items="Model.Genres" class="lead">
             <option value="">Любой жанр</option>
-        </select>     
-        Издательство:<select asp-for="BookPublisher" asp-items="Model.Publisher">
+        </select>
+        <select asp-for="BookPublisher" asp-items="Model.Publisher" class="lead">
             <option value="">Любое издательство</option>
         </select>
-        
-        Название:<input type="text" name="SearchString">
-        <input type="submit" value="Найти" />
+    </p>
+    <p>
+        Название:<input type="text" name="SearchString" class="lead">
+        <input type="submit" value="Найти" class="btn btn-outline-light" />
     </p>
 </form>
 
@@ -76,17 +78,17 @@
                 <p>
                     @if (User.IsInRole("Клиент")&(item.Status == WeeebLibrary.DAL.Enums.Status.Available))
                     {
-                        <a asp-controller="Order" asp-action="Checkout" asp-route-id="@item.Id">Забронировать</a>
+                        <a asp-controller="Order" asp-action="Checkout" asp-route-id="@item.Id" class="btn btn-outline-light">Забронировать</a>
                     }
 
                     @if (User.IsInRole("Библиотекарь"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-light">Изменить</a>
                     }
                     
                     @if (User.IsInRole("Библиотекарь"))
                     {
-                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-light">Удалить</a>
                     }
                 </p>
             </td>

@@ -1,35 +1,29 @@
 ﻿@{
-   
+
 
 }
 
 
 @if (User.Identity.IsAuthenticated)
 {
-    <p>Добро пожаловать, @User.Identity.Name</p>
+    <h1>Добро пожаловать, @User.Identity.Name</h1>
     @if (User.IsInRole("Admin"))
     {
-    <p class="lead">
-        <a href="https://localhost:44380/Users" class="btn btn-lg btn-secondary">Все пользователи</a>
-    </p>
-
-
+        <p class="lead">
+            <a asp-controller="Users" asp-action="Index" class="btn btn-lg btn-secondary">Все пользователи</a>
+        </p>
         <p class="lead">
             <a href="Roles" class="btn btn-lg btn-secondary">Список ролей</a>
         </p>
-        <p class="lead">
-            <a href="https://localhost:44380/Roles/UserList" class="btn btn-lg btn-secondary">Права доступа</a>
-        </p>
     }
-        <form method="post" asp-controller="Account" asp-action="Logout">
-            <input type="submit" value="Выход" />
-        </form>
-    
+    <form  method="post" asp-controller="Account" asp-action="Logout">
+        <input class="btn btn-lg btn-secondary" type="submit" value="Выход" />
+    </form>
 }
 else
 {
-    <a asp-controller="Account" asp-action="Login">Вход</a>
-    <a asp-controller="Account" asp-action="Register">Регистрация</a>
+    <a class="btn btn-lg btn-secondary" asp-controller="Account" asp-action="Login">Вход</a>
+    <a class="btn btn-lg btn-secondary" asp-controller="Account" asp-action="Register">Регистрация</a>
 
 
 

@@ -8,7 +8,7 @@
             <td>@role.Name</td>
             <td>
                 <form asp-action="Delete" asp-route-id="@role.Id" method="post">
-                    <button type="submit" class="btn btn-sm btn-danger">
+                    <button type="submit" class="btn btn-outline-light">
                         Удалить
                     </button>
                 </form>
@@ -16,5 +16,5 @@
         </tr>
     }
 </table>
-<a asp-action="Create">Добавить роль</a>
+<a asp-action="Create" class="btn btn-outline-light">Добавить роль</a>
 <a asp-action="UserList">Список пользователей</a>

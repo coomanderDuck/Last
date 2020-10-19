@@ -52,15 +52,15 @@
 
                     @if (User.IsInRole("Библиотекарь") & (item.Book.Status == WeeebLibrary.DAL.Enums.Status.Booked))
                     {
-                        <a asp-action="Give" asp-route-id="@item.Id">Выдать книгу</a>
+                        <a asp-action="Give" asp-route-id="@item.Id" class="btn btn-outline-light">Выдать книгу</a>
                     }
                     @if (User.IsInRole("Клиент") & (item.Book.Status == WeeebLibrary.DAL.Enums.Status.Booked))
                     {
-                        <a asp-action="Cancel" asp-route-id="@item.Id">Снять бронь</a>
+                        <a asp-action="Cancel" asp-route-id="@item.Id" class="btn btn-outline-light">Снять бронь</a>
                     }
                     @if ((User.IsInRole("Библиотекарь")) & (item.Book.Status == WeeebLibrary.DAL.Enums.Status.Taked))
                     {
-                        <a asp-action="Take" asp-route-id="@item.Id">Забрать книгу</a>
+                        <a asp-action="Take" asp-route-id="@item.Id" class="btn btn-outline-light">Забрать книгу</a>
                     }
 
                 </td>

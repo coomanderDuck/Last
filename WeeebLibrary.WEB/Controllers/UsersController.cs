@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
 using WeeebLibrary.BLL.InterfacesBLL;
@@ -30,6 +28,7 @@ namespace WeeebLibrary.Controllers
             {
                 var userDto = new UserDTO { Email = model.Email, UserName = model.Email, Name = model.Name, SecondName = model.SecondName, Phone = model.Phone };
                 var result = await userServices.CreateUserAsync(userDto, model.Password);
+
                 if (result.Succeeded)
                 {
                     userServices.AddToRoleAsync(userDto);
@@ -94,6 +93,7 @@ namespace WeeebLibrary.Controllers
         public async Task<IActionResult> ChangePassword(string id)
         {
             var userDTO = await userServices.GetUserAsync(id);
+
             if (userDTO == null)
             {
                 return NotFound();
@@ -110,8 +110,6 @@ namespace WeeebLibrary.Controllers
                 var userDto = await userServices.GetUserAsync(model.Id);
                 if (userDto != null)
                 {
-
-
                     var result = await userServices.ChangeUserPasswordAsync(model, userDto.Id);
                     if (result.Succeeded)
                     {
@@ -132,7 +130,5 @@ namespace WeeebLibrary.Controllers
             }
             return View(model);
         }
-
     }
-
 }

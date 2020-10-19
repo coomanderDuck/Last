@@ -39,6 +39,7 @@ namespace WeeebLibrary.BLL.Jobs
                     {
                         orderRepository.Delete(order);
                         var book = bookRepository.Get(order.BookId);
+                        book.Status = Status.Available;
                         logger.LogInformation("order deleted");
                     }
                 }

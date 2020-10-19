@@ -19,9 +19,11 @@ namespace WeeebLibrary.Controllers
             this.roleManager = roleManager;
             this.userServices = userServices;
         }
+
         public IActionResult Index() => View(roleManager.Roles.ToList());
 
         public IActionResult Create() => View();
+
         [HttpPost]
         public async Task<IActionResult> Create(string name)
         {
@@ -66,7 +68,6 @@ namespace WeeebLibrary.Controllers
                 var model = await userServices.EditRolesAsync(userDto);
                 return View(model);
             }
-
             return NotFound();
         }
 
@@ -78,10 +79,8 @@ namespace WeeebLibrary.Controllers
             if (userDto != null)
             {
                 await userServices.EditUserRolesAsync(userId, roles);
-
                 return RedirectToAction("UserList");
             }
-
             return NotFound();
         }
     }
