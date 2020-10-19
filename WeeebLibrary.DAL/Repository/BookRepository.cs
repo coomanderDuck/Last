@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using WeeebLibrary.DAL.Database;
 using WeeebLibrary.DAL.Database.Entitys;
 using WeeebLibrary.DAL.InterfacesDLL;
@@ -15,6 +13,7 @@ namespace WeeebLibrary.DAL.Repository
         {
             this.lDBContext = lDBContext;
         }
+
         public IQueryable<Book> GetAll()
         {
             return lDBContext.Set<Book>();
@@ -38,7 +37,6 @@ namespace WeeebLibrary.DAL.Repository
             lDBContext.Book.Remove(book);
             lDBContext.SaveChanges();
         }
-
     }
 }
 

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Linq;
 
 namespace WeeebLibrary.DAL.InterfacesDLL
 {
@@ -13,6 +11,7 @@ namespace WeeebLibrary.DAL.InterfacesDLL
         void Update(T item);
 
         void Delete(T item);
+
         IQueryable<T> GetAll();
     }
 }

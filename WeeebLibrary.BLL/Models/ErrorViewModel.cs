@@ -1,5 +1,3 @@
-using System;
-
 namespace WeeebLibrary.BLL.Models
 {
     public class ErrorViewModel

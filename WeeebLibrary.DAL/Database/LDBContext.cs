@@ -1,25 +1,22 @@
-﻿using WeeebLibrary.DAL.Database.Entitys;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using WeeebLibrary.DAL.Database.Entitys;
 
 
 namespace WeeebLibrary.DAL.Database
 {
-   
-        public class LDBContext : IdentityDbContext<User>
-        {
+
+    public class LDBContext : IdentityDbContext<User>
+    {
         public DbSet<Book> Book { get; set; }
 
         public DbSet<Order> Order { get; set; }
-        public LDBContext(DbContextOptions<LDBContext> options )
+
+        public LDBContext(DbContextOptions<LDBContext> options)
                 : base(options)
-            {
-          //Database.Migrate();
-            }
+        {
+            Database.Migrate();
         }
-    
+    }
+
 }

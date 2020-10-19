@@ -20,6 +20,7 @@ namespace WeeebLibrary.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Register(Register model)
         {
@@ -43,6 +44,7 @@ namespace WeeebLibrary.Controllers
             }
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {

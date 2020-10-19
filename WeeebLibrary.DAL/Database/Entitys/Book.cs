@@ -29,7 +29,5 @@ namespace WeeebLibrary.DAL.Database.Entitys
 
         [Display(Name = "Статус")]
         public Status Status { set; get; }
-
-
     }
 }

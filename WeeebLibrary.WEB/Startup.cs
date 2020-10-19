@@ -7,6 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WeeebLibrary.BLL;
 using WeeebLibrary.BLL.RoleInitializer;
+using WeeebLibrary.BLL.Jobs;
+using Quartz;
+using Quartz.Spi;
+using Quartz.Impl;
 
 namespace WeeebLibrary
 {
@@ -24,8 +28,19 @@ namespace WeeebLibrary
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //подключение коллекции сервисоа из класса MyConfigServiceCollection
+            //подключение коллекции сервисов из класса MyConfigServiceCollection
             services.AddMyConfig(Configuration);
+
+            // Добавляем Quartz services
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+
+            // Добавляем our job
+            services.AddSingleton<AutoCancelJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(AutoCancelJob),
+                cronExpression: "0/5 * * * * ?")); // Запускать каждые 5 секунд
+            services.AddHostedService<QuartzHostedService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllersWithViews();

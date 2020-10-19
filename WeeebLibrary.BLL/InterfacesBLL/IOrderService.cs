@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
-using WeeebLibrary.DAL.Database.Entitys;
 
 namespace WeeebLibrary.BLL.Interfaces
 {

@@ -20,6 +20,5 @@ namespace WeeebLibrary.BLL.RoleInitializer
 
             await RoleInitializer.InitializeAsync(userManager, rolesManager);
         }
-
     }
 }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -20,6 +19,7 @@ namespace WeeebLibrary.Repository
         private readonly IRepository<Book> bookRepositiry;
         private readonly IRepository<Order> orderRepositiry;
         private readonly IHttpContextAccessor httpContextAccessor;
+
         public OrderService(IRepository<Book> bookRepositiry, IRepository<Order> orderRepositiry, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
         {
             this.bookRepositiry = bookRepositiry;
@@ -41,7 +41,6 @@ namespace WeeebLibrary.Repository
                 Book = order.Book,
                 User = order.User
             };
-
             return orderDto;
         }
 
@@ -61,7 +60,6 @@ namespace WeeebLibrary.Repository
                     User = b.User
                 })
                 .ToList();
-
             return orders;
         }
 
@@ -99,6 +97,7 @@ namespace WeeebLibrary.Repository
             bookRepositiry.Update(book);
             orderRepositiry.Delete(order);
         }
+
         public void DeleteOrder(int id)
         {
             var order = orderRepositiry.Get(id);

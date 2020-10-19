@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
 using WeeebLibrary.BLL.Interfaces;
+
 namespace WeeebLibrary.Controllers
 {
     public class BookController : Controller
@@ -72,7 +72,6 @@ namespace WeeebLibrary.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -105,7 +104,6 @@ namespace WeeebLibrary.Controllers
             {
                 return NotFound();
             }
-
             return View(book);
         }
 

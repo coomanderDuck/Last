@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using WeeebLibrary.DAL.Database;
 using WeeebLibrary.DAL.Database.Entitys;
 using WeeebLibrary.DAL.InterfacesDLL;
@@ -28,6 +25,7 @@ namespace WeeebLibrary.DAL.Repository.DAL
             lDBContext.Order.Add(order);
             lDBContext.SaveChanges();
         }
+
         public void Update(Order order)
         {
             lDBContext.Update(order);
@@ -39,7 +37,6 @@ namespace WeeebLibrary.DAL.Repository.DAL
             lDBContext.Order.Remove(order);
             lDBContext.SaveChanges();
         }
-
     }
 }
 

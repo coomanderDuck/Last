@@ -47,14 +47,17 @@ namespace WeeebLibrary.BLL.Services
             {
                 books = books.Where(s => s.Name.Contains(searchString));
             }
+
             if (!string.IsNullOrEmpty(bookAutor))
             {
                 books = books.Where(x => x.Autor == bookAutor);
             }
+
             if (!string.IsNullOrEmpty(bookGenre))
             {
                 books = books.Where(x => x.Genre == bookGenre);
             }
+
             if (!string.IsNullOrEmpty(bookPublisher))
             {
                 books = books.Where(x => x.Publisher == bookPublisher);
@@ -77,6 +80,7 @@ namespace WeeebLibrary.BLL.Services
 
             return mapper.Map<Book, BookDTO>(book);
         }
+
         public IEnumerable<BookDTO> GetBooks()
         {
             // применяем автомаппер для проекции одной коллекции на другую
@@ -108,6 +112,7 @@ namespace WeeebLibrary.BLL.Services
 
             bookRepositiry.Create(book);
         }
+
         public async Task EditBookAsync(BookDTO bookDto, IFormFile uploadedFile)
         {
 
@@ -133,11 +138,13 @@ namespace WeeebLibrary.BLL.Services
             }
             bookRepositiry.Update(book);
         }
+
         public async Task DeleteBookAsync(int id)
         {
             var book = await lDBContext.Book.FindAsync(id);
-             bookRepositiry.Delete(book);
+            bookRepositiry.Delete(book);
         }
+
         public bool BookExists(int id)
         {
             return lDBContext.Book.Any(e => e.Id == id);

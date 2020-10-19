@@ -23,11 +23,8 @@ namespace WeeebLibrary.BLL
         {
             services.AddDbContextPool<LDBContext>(options =>
                 options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
-
-             services.AddIdentity<User, IdentityRole>(opts =>
-             {
-             })
-                 .AddEntityFrameworkStores<LDBContext>();
+            services.AddIdentity<User, IdentityRole>(opts =>{})
+                .AddEntityFrameworkStores<LDBContext>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IUserService, UserService>();

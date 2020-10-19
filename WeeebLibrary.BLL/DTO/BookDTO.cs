@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WeeebLibrary.DAL.Database.Entitys;
 using WeeebLibrary.DAL.Enums;
 
 namespace WeeebLibrary.BLL.DTO
 {
-    public class BookDTO 
+    public class BookDTO
     {
         public int Id { get; set; }
 
@@ -30,7 +29,5 @@ namespace WeeebLibrary.BLL.DTO
 
         [Display(Name = "Статус")]
         public Status Status { set; get; }
-
-
     }
 }

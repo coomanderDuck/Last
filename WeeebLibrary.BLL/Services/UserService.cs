@@ -80,11 +80,9 @@ namespace WeeebLibrary.BLL.Services
         public async Task<IdentityResult> EditUserAsync(EditUserViewModel model, string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
-
             user.Email = model.Email;
             user.UserName = model.Email;
             user.SecondName = model.SecondName;
-
             var result = await userManager.UpdateAsync(user);
             return result;
         }
@@ -101,14 +99,13 @@ namespace WeeebLibrary.BLL.Services
         public async Task<IdentityResult> ChangeUserPasswordAsync(ChangePasswordViewModel model, string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
-
             var _passwordValidator =
                        httpContextAccessor.HttpContext.RequestServices.GetService(typeof(IPasswordValidator<User>)) as IPasswordValidator<User>;
             var _passwordHasher =
                         httpContextAccessor.HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) as IPasswordHasher<User>;
-
-            IdentityResult result =
+            var result =
                 await _passwordValidator.ValidateAsync(userManager, user, model.NewPassword);
+
             if (result.Succeeded)
             {
                 user.PasswordHash = _passwordHasher.HashPassword(user, model.NewPassword);
@@ -156,7 +153,6 @@ namespace WeeebLibrary.BLL.Services
             var removedRoles = userRoles.Except(roles);
 
             await userManager.AddToRolesAsync(user, addedRoles);
-
             await userManager.RemoveFromRolesAsync(user, removedRoles);
         }
 
