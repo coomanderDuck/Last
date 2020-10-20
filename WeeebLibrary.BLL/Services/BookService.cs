@@ -30,18 +30,17 @@ namespace WeeebLibrary.BLL.Services
         //Фильтрация книг
         public async Task<BookGenreViewModel> FilterBooksAsync(string searchString, string bookAutor, string bookGenre, string bookPublisher)
         {
-            IQueryable<string> autorQuery = from m in lDBContext.Book
-                                            orderby m.Autor
-                                            select m.Autor;
-            IQueryable<string> genreQuery = from m in lDBContext.Book
-                                            orderby m.Genre
-                                            select m.Genre;
-            IQueryable<string> publisherQuery = from m in lDBContext.Book
-                                                orderby m.Publisher
-                                                select m.Publisher;
+            IQueryable<string> autorQuery = bookRepositiry.GetAll()
+                                            .OrderBy(b => b.Autor)
+                                            .Select(b => b.Autor);
+            IQueryable<string> genreQuery = bookRepositiry.GetAll()
+                                            .OrderBy(b => b.Genre)
+                                            .Select(b => b.Genre);
+            IQueryable<string> publisherQuery = bookRepositiry.GetAll()
+                                            .OrderBy(b => b.Publisher)
+                                            .Select(b => b.Publisher);
 
-            var books = from m in lDBContext.Book
-                        select m;
+            var books = bookRepositiry.GetAll();
 
             if (!String.IsNullOrEmpty(searchString))
             {
