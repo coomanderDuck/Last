@@ -31,7 +31,7 @@ namespace WeeebLibrary.Controllers
 
                 if (result.Succeeded)
                 {
-                    userServices.AddToRoleAsync(userDto);
+                    await userServices.AddToRoleAsync(userDto);
                     return RedirectToAction("Index");
                 }
                 else

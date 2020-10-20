@@ -76,7 +76,7 @@
 
             <td>
                 <p>
-                    @if (User.IsInRole("Клиент")&(item.Status == WeeebLibrary.DAL.Enums.Status.Available))
+                    @if((item.Status == WeeebLibrary.DAL.Enums.Status.Available)&(User.IsInRole("Клиент")))
                     {
                         <a asp-controller="Order" asp-action="Checkout" asp-route-id="@item.Id" class="btn btn-outline-light">Забронировать</a>
                     }

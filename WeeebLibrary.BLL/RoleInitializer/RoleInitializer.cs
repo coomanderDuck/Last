@@ -28,8 +28,8 @@ namespace WeeebLibrary.BLL.RoleInitializer
 
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
-                User Admin = new User { Email = adminEmail, UserName = adminEmail };
-                IdentityResult result = await userManager.CreateAsync(Admin, password);
+                var Admin = new User { Email = adminEmail, UserName = adminEmail };
+                var result = await userManager.CreateAsync(Admin, password);
 
                 if (result.Succeeded)
                 {

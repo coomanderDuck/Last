@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
 using WeeebLibrary.BLL.InterfacesBLL;
 using WeeebLibrary.BLL.Models;
+using WeeebLibrary.DAL.Database;
 using WeeebLibrary.DAL.Database.Entitys;
 
 namespace WeeebLibrary.BLL.Services
@@ -15,15 +16,17 @@ namespace WeeebLibrary.BLL.Services
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly LDBContext lDBContext;
         private readonly IHttpContextAccessor httpContextAccessor;
         RoleManager<IdentityRole> roleManager;
 
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor)
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor, LDBContext lDBContext)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.httpContextAccessor = httpContextAccessor;
+            this.lDBContext = lDBContext;
         }
         public List<UserDTO> ToListUsers()
         {
@@ -33,8 +36,7 @@ namespace WeeebLibrary.BLL.Services
 
         public async Task RegisterUsersAsync(UserDTO userDto)
         {
-
-            var user = NewUser(userDto);
+            var user = await userManager.FindByIdAsync(userDto.Id); 
             await userManager.AddToRoleAsync(user, "Клиент");
             await signInManager.SignInAsync(user, false);
         }
@@ -48,7 +50,7 @@ namespace WeeebLibrary.BLL.Services
 
         public User NewUser(UserDTO userDto)
         {
-            var user = new User { Email = userDto.Email, UserName = userDto.Email, Name = userDto.Name, SecondName = userDto.SecondName, Phone = userDto.Phone };
+            var user = new User {Id = userDto.Id, Email = userDto.Email, UserName = userDto.Email, Name = userDto.Name, SecondName = userDto.SecondName, Phone = userDto.Phone };
             return user;
         }
 
@@ -63,17 +65,16 @@ namespace WeeebLibrary.BLL.Services
             await signInManager.SignOutAsync();
         }
 
-        public void AddToRoleAsync(UserDTO userDto)
+        public async Task AddToRoleAsync(UserDTO userDto)
         {
             var user = NewUser(userDto);
-            userManager.AddToRoleAsync(user, "Клиент");
+            await userManager.AddToRoleAsync(user, "Клиент");
         }
 
         public async Task<UserDTO> GetUserAsync(string id)
         {
             var user = await userManager.FindByIdAsync(id);
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<User, UserDTO>()).CreateMapper();
-
             return mapper.Map<User, UserDTO>(user);
         }
 
