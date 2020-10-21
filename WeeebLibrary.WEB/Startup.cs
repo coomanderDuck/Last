@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Quartz.Impl;
 using Quartz.Spi;
 using WeeebLibrary.BLL;
 using WeeebLibrary.BLL.Jobs;
+using WeeebLibrary.BLL.MappingProfiles;
 using WeeebLibrary.BLL.RoleInitializer;
 
 namespace WeeebLibrary
@@ -39,6 +41,15 @@ namespace WeeebLibrary
                 jobType: typeof(AutoCancelJob),
                 cronExpression: "0/5 * * * * ?")); // Запускать каждые 5 секунд
             services.AddHostedService<QuartzHostedService>();
+
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new BookProfile());
+                mc.AddProfile(new UserProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllersWithViews();

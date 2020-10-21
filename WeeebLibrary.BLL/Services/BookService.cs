@@ -18,13 +18,15 @@ namespace WeeebLibrary.BLL.Services
 {
     class BookService : IBookService
     {
+        private readonly IMapper mapper;
         private readonly LDBContext lDBContext;
         private readonly IRepository<Book> bookRepositiry;
 
-        public BookService(LDBContext lDBContext, IRepository<Book> bookRepositiry)
+        public BookService(LDBContext lDBContext, IRepository<Book> bookRepositiry, IMapper mapper)
         {
             this.lDBContext = lDBContext;
             this.bookRepositiry = bookRepositiry;
+            this.mapper = mapper;
         }
 
         //Фильтрация книг
@@ -75,7 +77,6 @@ namespace WeeebLibrary.BLL.Services
         public BookDTO GetBook(int id)
         {
             var book = bookRepositiry.Get(id);
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>()).CreateMapper();
 
             return mapper.Map<Book, BookDTO>(book);
         }
@@ -83,7 +84,7 @@ namespace WeeebLibrary.BLL.Services
         public IEnumerable<BookDTO> GetBooks()
         {
             // применяем автомаппер для проекции одной коллекции на другую
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDTO>()).CreateMapper();
+
             return mapper.Map<IEnumerable<Book>, List<BookDTO>>(bookRepositiry.GetAll());
         }
 
