@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeeebLibrary.DAL", "WeeebLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeeebLibrary.WEB", "WeeebLibrary.WEB\WeeebLibrary.WEB.csproj", "{8D80F760-BB50-4CC4-A066-D7479D5B9DA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser\Parser.csproj", "{CE174161-9F12-4792-A6E8-FB8854675C75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8D80F760-BB50-4CC4-A066-D7479D5B9DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D80F760-BB50-4CC4-A066-D7479D5B9DA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D80F760-BB50-4CC4-A066-D7479D5B9DA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE174161-9F12-4792-A6E8-FB8854675C75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE174161-9F12-4792-A6E8-FB8854675C75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE174161-9F12-4792-A6E8-FB8854675C75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE174161-9F12-4792-A6E8-FB8854675C75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

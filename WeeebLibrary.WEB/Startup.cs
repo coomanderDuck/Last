@@ -12,6 +12,7 @@ using WeeebLibrary.BLL;
 using WeeebLibrary.BLL.Jobs;
 using WeeebLibrary.BLL.MappingProfiles;
 using WeeebLibrary.BLL.RoleInitializer;
+using WeeebLibrary.Parser;
 
 namespace WeeebLibrary
 {
@@ -36,10 +37,14 @@ namespace WeeebLibrary
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
             // Добавляем our job
-            services.AddSingleton<AutoCancelJob>();
+            services.AddSingleton<CancelJob>();
+            services.AddSingleton<BookParser>();
             services.AddSingleton(new JobSchedule(
-                jobType: typeof(AutoCancelJob),
+                jobType: typeof(CancelJob),
                 cronExpression: "0/5 * * * * ?")); // Запускать каждые 5 секунд
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(BookParser),
+                cronExpression: "0 8 * * * ?")); //Каждый день в 8:00
             services.AddHostedService<QuartzHostedService>();
 
             // Auto Mapper Configurations
@@ -83,6 +88,7 @@ namespace WeeebLibrary
             });
 
             await CallRoleInitializer.RoleInitializeAsync(app);
+            //await CallParser.BooksParsingAsync(app);
         }
     }
 }

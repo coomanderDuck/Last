@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WeeebLibrary.BLL.Interfaces;
 using WeeebLibrary.BLL.InterfacesBLL;
+using WeeebLibrary.BLL.Jobs;
 using WeeebLibrary.BLL.Services;
 using WeeebLibrary.DAL.Database;
 using WeeebLibrary.DAL.Database.Entitys;
@@ -23,13 +24,14 @@ namespace WeeebLibrary.BLL
         {
             services.AddDbContextPool<LDBContext>(options =>
                 options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<User, IdentityRole>(opts =>{})
+            services.AddIdentity<User, IdentityRole>(opts => { })
                 .AddEntityFrameworkStores<LDBContext>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRepository<Book>, BookRepository>();
             services.AddTransient<IRepository<Order>, OrderRepositiry>();
+
             return services;
         }
     }

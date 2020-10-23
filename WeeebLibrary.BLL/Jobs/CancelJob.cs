@@ -11,12 +11,12 @@ using WeeebLibrary.DAL.InterfacesDLL;
 
 namespace WeeebLibrary.BLL.Jobs
 {
-    public class AutoCancelJob : IJob
+    public class CancelJob : IJob
     {
         private readonly IServiceProvider serviceProvider;
-        private readonly ILogger<AutoCancelJob> logger;
+        private readonly ILogger<CancelJob> logger;
 
-        public AutoCancelJob(IServiceProvider serviceProvider, ILogger<AutoCancelJob> logger)
+        public CancelJob(IServiceProvider serviceProvider, ILogger<CancelJob> logger)
         {
             this.serviceProvider = serviceProvider;
             this.logger = logger;
@@ -41,7 +41,7 @@ namespace WeeebLibrary.BLL.Jobs
                         var book = bookRepository.Get(order.BookId);
                         book.Status = Status.Available;
                         bookRepository.Update(book);
-                        logger.LogInformation("order deleted");
+                        logger.LogInformation("Заказ книги " + order.Book.Name + "удалён");
                     }
                 }
                 await Task.CompletedTask;

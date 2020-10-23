@@ -16,6 +16,8 @@ namespace WeeebLibrary.BLL.Interfaces
 
         Task CreateBookAsync(BookDTO bookDto, IFormFile uploadedFile);
 
+        void CreateParsBook(BookDTO bookDto);
+
         Task EditBookAsync(BookDTO bookDto, IFormFile uploadedFile);
 
         Task DeleteBookAsync(int id);

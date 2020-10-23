@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
 using WeeebLibrary.BLL.Interfaces;
@@ -77,14 +78,12 @@ namespace WeeebLibrary.BLL.Services
         public BookDTO GetBook(int id)
         {
             var book = bookRepositiry.Get(id);
-
             return mapper.Map<Book, BookDTO>(book);
         }
 
         public IEnumerable<BookDTO> GetBooks()
         {
             // применяем автомаппер для проекции одной коллекции на другую
-
             return mapper.Map<IEnumerable<Book>, List<BookDTO>>(bookRepositiry.GetAll());
         }
 
@@ -97,6 +96,7 @@ namespace WeeebLibrary.BLL.Services
             {
                 await uploadedFile.CopyToAsync(fileStream);
             }
+
             var book = new Book
             {
                 Id = bookDto.Id,
@@ -110,6 +110,12 @@ namespace WeeebLibrary.BLL.Services
                 Status = bookDto.Status
             };
 
+            bookRepositiry.Create(book);
+        }
+
+        public void CreateParsBook(BookDTO bookDto)
+        {
+            var book = mapper.Map<BookDTO, Book>(bookDto);
             bookRepositiry.Create(book);
         }
 
