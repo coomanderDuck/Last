@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WeeebLibrary.BLL.Interfaces;
 using WeeebLibrary.BLL.InterfacesBLL;
-using WeeebLibrary.BLL.Jobs;
 using WeeebLibrary.BLL.Services;
 using WeeebLibrary.DAL.Database;
 using WeeebLibrary.DAL.Database.Entitys;
@@ -31,6 +30,7 @@ namespace WeeebLibrary.BLL
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRepository<Book>, BookRepository>();
             services.AddTransient<IRepository<Order>, OrderRepositiry>();
+            services.AddTransient<ILastIdRepository, LastIdRepository>();
 
             return services;
         }

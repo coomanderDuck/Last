@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using WeeebLibrary.DAL.Database;
 using WeeebLibrary.DAL.Database.Entitys;
 using WeeebLibrary.DAL.InterfacesDLL;
@@ -21,10 +22,10 @@ namespace WeeebLibrary.DAL.Repository
 
         public Book Get(int Id) => lDBContext.Book.FirstOrDefault(p => p.Id == Id);
 
-        public void Create(Book book)
+        public async Task CreateAsync(Book book)
         {
             lDBContext.Book.Add(book);
-            lDBContext.SaveChanges();
+            await lDBContext.SaveChangesAsync();
         }
 
         public void Update(Book book)

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace WeeebLibrary.DAL.InterfacesDLL
 {
@@ -6,7 +7,7 @@ namespace WeeebLibrary.DAL.InterfacesDLL
     {
         T Get(int id);
 
-        void Create(T item);
+        Task CreateAsync(T item);
 
         void Update(T item);
 

@@ -77,7 +77,7 @@ namespace WeeebLibrary.Repository
                 };
                 book.Status = Status.Booked;
                 bookRepositiry.Update(book);
-                orderRepositiry.Create(order);
+                await orderRepositiry.CreateAsync(order);
             }
         }
 

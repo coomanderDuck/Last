@@ -40,12 +40,12 @@ namespace WeeebLibrary
             services.AddSingleton<CancelJob>();
             services.AddSingleton<BookParser>();
             services.AddSingleton(new JobSchedule(
-                jobType: typeof(CancelJob),
-                cronExpression: "0/5 * * * * ?")); // Запускать каждые 5 секунд
+               jobType: typeof(CancelJob),
+               cronExpression: "0 0/1 * 1/1 * ? *")); // Запускать каждую минуту
             services.AddSingleton(new JobSchedule(
                 jobType: typeof(BookParser),
-                cronExpression: "0 8 * * * ?")); //Каждый день в 8:00
-            services.AddHostedService<QuartzHostedService>();
+                cronExpression: "0 50 14 1/1 * ? *"));  //Запускать каждый день в 14:50
+          services.AddHostedService<QuartzHostedService>();
 
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
@@ -56,6 +56,7 @@ namespace WeeebLibrary
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            services.AddHttpClient();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllersWithViews();
             services.AddDistributedMemoryCache();
@@ -88,7 +89,6 @@ namespace WeeebLibrary
             });
 
             await CallRoleInitializer.RoleInitializeAsync(app);
-            //await CallParser.BooksParsingAsync(app);
         }
     }
 }

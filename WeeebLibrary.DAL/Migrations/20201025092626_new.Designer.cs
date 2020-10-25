@@ -10,7 +10,7 @@ using WeeebLibrary.DAL.Database;
 namespace WeeebLibrary.DAL.Migrations
 {
     [DbContext(typeof(LDBContext))]
-    [Migration("20201015213743_new")]
+    [Migration("20201025092626_new")]
     partial class @new
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -185,6 +185,21 @@ namespace WeeebLibrary.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Book");
+                });
+
+            modelBuilder.Entity("WeeebLibrary.DAL.Database.Entitys.LastParserId", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("LastId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LastParserId");
                 });
 
             modelBuilder.Entity("WeeebLibrary.DAL.Database.Entitys.Order", b =>

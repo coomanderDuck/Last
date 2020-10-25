@@ -110,13 +110,13 @@ namespace WeeebLibrary.BLL.Services
                 Status = bookDto.Status
             };
 
-            bookRepositiry.Create(book);
+            await bookRepositiry.CreateAsync(book);
         }
 
         public void CreateParsBook(BookDTO bookDto)
         {
             var book = mapper.Map<BookDTO, Book>(bookDto);
-            bookRepositiry.Create(book);
+            bookRepositiry.CreateAsync(book);
         }
 
         public async Task EditBookAsync(BookDTO bookDto, IFormFile uploadedFile)

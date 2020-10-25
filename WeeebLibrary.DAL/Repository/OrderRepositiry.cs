@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using WeeebLibrary.DAL.Database;
 using WeeebLibrary.DAL.Database.Entitys;
 using WeeebLibrary.DAL.InterfacesDLL;
@@ -20,10 +21,10 @@ namespace WeeebLibrary.DAL.Repository.DAL
         }
         public Order Get(int orderId) => lDBContext.Order.FirstOrDefault(p => p.Id == orderId);
 
-        public void Create(Order order)
+        public async Task CreateAsync(Order order)
         {
             lDBContext.Order.Add(order);
-            lDBContext.SaveChanges();
+            await lDBContext.SaveChangesAsync();
         }
 
         public void Update(Order order)

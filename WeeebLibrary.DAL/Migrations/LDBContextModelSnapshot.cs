@@ -185,6 +185,21 @@ namespace WeeebLibrary.DAL.Migrations
                     b.ToTable("Book");
                 });
 
+            modelBuilder.Entity("WeeebLibrary.DAL.Database.Entitys.LastParserId", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("LastId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LastParserId");
+                });
+
             modelBuilder.Entity("WeeebLibrary.DAL.Database.Entitys.Order", b =>
                 {
                     b.Property<int>("Id")

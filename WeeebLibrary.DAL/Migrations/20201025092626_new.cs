@@ -71,6 +71,19 @@ namespace WeeebLibrary.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LastParserId",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    LastId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LastParserId", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -267,6 +280,9 @@ namespace WeeebLibrary.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "LastParserId");
 
             migrationBuilder.DropTable(
                 name: "Order");
