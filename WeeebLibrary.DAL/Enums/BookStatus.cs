@@ -2,7 +2,7 @@
 
 namespace WeeebLibrary.DAL.Enums
 {
-    public enum Status
+    public enum BookStatus
     {
         [Display(Name = "Доступна")]
         Available,

@@ -1,0 +1,102 @@
+﻿@model WeeebLibrary.BLL.Models.OrderViewModel
+@{
+    ViewData["Title"] = "Reports";
+    var nullTime = new DateTime();
+}
+    <div class="form-group">
+        <form method="post" asp-controller="Order" asp-action="Reports">
+            <p>
+                <select asp-for="OrderStatus" class="lead">
+                    <option value="Any">Любые</option>
+                    <option value="Booked">Активные</option>
+                    <option value="Taked">Выданные</option>
+                    <option value="Completed">Завершённые</option>
+                    <option value="Сanceled">Отменённые</option>
+                </select>
+            </p>
+            <p>
+                С <input type="datetime-local" id="time" name="minDate" class="lead"/> 
+                По <input min="minDate" type="datetime-local" name="maxDate" class="lead"/>
+            </p>
+            <p class="text-danger">
+                @ViewBag.DateError
+            </p>
+            <input type="submit" value="Показать" class="lead"/>
+            Также скачать? 
+            <input type="checkbox" name="save" value="true" class="lead" />
+        </form>
+    </div>
+    <h1>Отчёты</h1>
+    <table class="lead">
+        <thead>
+            <tr>
+                <th>
+                    Номер брони
+                </th>
+                <th>
+                    Книга
+                </th>
+                <th>
+                    Пользователь
+                </th>
+                <th>
+                    Статус заказа
+                </th>
+                <th>
+                    Время бронирования
+                </th>
+                <th>
+                    Время выдачи
+                </th>
+                <th>
+                    Время заврешения заказа
+                </th>
+                <th>
+                    Время отмены заказа
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Orders)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Book.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BookedTime)
+                    </td>
+                    <td>
+                        @if (item.TakedTime != nullTime)
+                        {
+                            @Html.DisplayFor(modelItem => item.TakedTime)
+                        }
+                    </td>
+                    <td>
+                        @if (item.CompletedTime != nullTime)
+                        {
+                            @Html.DisplayFor(modelItem => item.CompletedTime)
+                        }
+                    </td>
+                    <td>
+                        @if (item.СanceledTime != nullTime)
+                        {
+                            @Html.DisplayFor(modelItem => item.СanceledTime)
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+

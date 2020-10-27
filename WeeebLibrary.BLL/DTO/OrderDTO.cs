@@ -1,5 +1,6 @@
 ﻿using System;
 using WeeebLibrary.DAL.Database.Entitys;
+using WeeebLibrary.DAL.Enums;
 
 namespace WeeebLibrary.BLL.DTO
 {
@@ -11,7 +12,15 @@ namespace WeeebLibrary.BLL.DTO
 
         public string UserId { get; set; }
 
-        public DateTime OrderTime { get; set; }
+        public  OrderStatus OrderStatus { get; set; }
+
+        public DateTime BookedTime { get; set; }
+
+        public DateTime TakedTime { get; set; }
+
+        public DateTime CompletedTime { get; set; }
+
+        public DateTime СanceledTime { get; set; }
 
         public virtual Book Book { get; set; }
 

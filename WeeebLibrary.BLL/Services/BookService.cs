@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
 using WeeebLibrary.BLL.Interfaces;
@@ -21,29 +20,29 @@ namespace WeeebLibrary.BLL.Services
     {
         private readonly IMapper mapper;
         private readonly LDBContext lDBContext;
-        private readonly IRepository<Book> bookRepositiry;
+        private readonly IRepository<Book> bookRepository;
 
-        public BookService(LDBContext lDBContext, IRepository<Book> bookRepositiry, IMapper mapper)
+        public BookService(LDBContext lDBContext, IRepository<Book> bookRepository, IMapper mapper)
         {
             this.lDBContext = lDBContext;
-            this.bookRepositiry = bookRepositiry;
+            this.bookRepository = bookRepository;
             this.mapper = mapper;
         }
 
         //Фильтрация книг
         public async Task<BookGenreViewModel> FilterBooksAsync(string searchString, string bookAutor, string bookGenre, string bookPublisher)
         {
-            IQueryable<string> autorQuery = bookRepositiry.GetAll()
+            IQueryable<string> autorQuery = bookRepository.GetAll()
                                             .OrderBy(b => b.Autor)
                                             .Select(b => b.Autor);
-            IQueryable<string> genreQuery = bookRepositiry.GetAll()
+            IQueryable<string> genreQuery = bookRepository.GetAll()
                                             .OrderBy(b => b.Genre)
                                             .Select(b => b.Genre);
-            IQueryable<string> publisherQuery = bookRepositiry.GetAll()
+            IQueryable<string> publisherQuery = bookRepository.GetAll()
                                             .OrderBy(b => b.Publisher)
                                             .Select(b => b.Publisher);
 
-            var books = bookRepositiry.GetAll();
+            var books = bookRepository.GetAll();
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -77,14 +76,14 @@ namespace WeeebLibrary.BLL.Services
 
         public BookDTO GetBook(int id)
         {
-            var book = bookRepositiry.Get(id);
+            var book = bookRepository.Get(id);
             return mapper.Map<Book, BookDTO>(book);
         }
 
         public IEnumerable<BookDTO> GetBooks()
         {
             // применяем автомаппер для проекции одной коллекции на другую
-            return mapper.Map<IEnumerable<Book>, List<BookDTO>>(bookRepositiry.GetAll());
+            return mapper.Map<IEnumerable<Book>, List<BookDTO>>(bookRepository.GetAll());
         }
 
         public async Task CreateBookAsync(BookDTO bookDto, IFormFile uploadedFile)
@@ -110,19 +109,18 @@ namespace WeeebLibrary.BLL.Services
                 Status = bookDto.Status
             };
 
-            await bookRepositiry.CreateAsync(book);
+            await bookRepository.CreateAsync(book);
         }
 
         public void CreateParsBook(BookDTO bookDto)
         {
             var book = mapper.Map<BookDTO, Book>(bookDto);
-            bookRepositiry.CreateAsync(book);
+            bookRepository.CreateAsync(book);
         }
 
         public async Task EditBookAsync(BookDTO bookDto, IFormFile uploadedFile)
         {
-
-            var book = bookRepositiry.Get(bookDto.Id);
+            var book = bookRepository.Get(bookDto.Id);
 
             book.Name = bookDto.Name;
             book.Autor = bookDto.Autor;
@@ -130,6 +128,7 @@ namespace WeeebLibrary.BLL.Services
             book.Publisher = bookDto.Publisher;
             book.Desc = bookDto.Desc;
             book.Status = bookDto.Status;
+
             if (uploadedFile != null)
             {
                 // путь к папке Files
@@ -142,13 +141,13 @@ namespace WeeebLibrary.BLL.Services
                 book.Img = uploadedFile.FileName;
                 book.ImgPath = path;
             }
-            bookRepositiry.Update(book);
+            bookRepository.Update(book);
         }
 
         public async Task DeleteBookAsync(int id)
         {
             var book = await lDBContext.Book.FindAsync(id);
-            bookRepositiry.Delete(book);
+            bookRepository.Delete(book);
         }
 
         public bool BookExists(int id)

@@ -34,14 +34,15 @@ namespace WeeebLibrary.BLL.Jobs
                 if (orders != null)
                 {
                     foreach (var order in orders.
-                        Where(c => c.Book.Status == Status.Booked).
-                        Where(c => c.OrderTime.AddMinutes(5) <= DateTime.Now))
+                        Where(c => c.Book.Status == BookStatus.Booked).
+                        Where(c => c.BookedTime.AddDays(7) <= DateTime.Now)) //Через неделю забронированный заказ отменяется
                     {
-                        orderRepository.Delete(order);
                         var book = bookRepository.Get(order.BookId);
-                        book.Status = Status.Available;
+                        book.Status = BookStatus.Available;
+                        order.OrderStatus = OrderStatus.Сanceled;
                         bookRepository.Update(book);
-                        logger.LogInformation("Заказ книги " + order.Book.Name + "удалён");
+                        orderRepository.Update(order);
+                        logger.LogInformation("Заказ книги " + order.Book.Name + "отменён по истечению времени ожидания");
                     }
                 }
                 await Task.CompletedTask;

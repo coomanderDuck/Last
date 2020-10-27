@@ -44,7 +44,7 @@ namespace WeeebLibrary
                cronExpression: "0 0/1 * 1/1 * ? *")); // Запускать каждую минуту
             services.AddSingleton(new JobSchedule(
                 jobType: typeof(BookParser),
-                cronExpression: "0 50 14 1/1 * ? *"));  //Запускать каждый день в 14:50
+                cronExpression: "0 33 20 1/1 * ? *"));  //Запускать каждый день 
           services.AddHostedService<QuartzHostedService>();
 
             // Auto Mapper Configurations

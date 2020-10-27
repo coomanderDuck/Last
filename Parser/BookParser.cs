@@ -23,15 +23,15 @@ namespace WeeebLibrary.Parser
             this.logger = logger;
             this.clientFactory = clientFactory;
         }
+
         public async Task Execute(IJobExecutionContext context)
         {
             using (var scope = serviceProvider.CreateScope())
             {
                 var bookRepository = scope.ServiceProvider.GetService<IRepository<Book>>();
                 var lastRepository = scope.ServiceProvider.GetService<ILastIdRepository>();
-
                 var books = bookRepository.GetAll();
-                var booksCount = 50;
+                var parsCount = 50;
                 var httpСlient = clientFactory.CreateClient();
                 var startId = lastRepository.Get();
 
@@ -41,7 +41,7 @@ namespace WeeebLibrary.Parser
                     lastRepository.Create(startId);
                 }
 
-                for (int i = 0; i <= booksCount; i++)
+                for (int i = 0; i <= parsCount; i++)
                 {
                     //получение страницы сайта "Читай город"                   
                     var response = await httpСlient.GetAsync("https://www.chitai-gorod.ru/catalog/book/" + startId.LastId);
@@ -50,15 +50,19 @@ namespace WeeebLibrary.Parser
                     pageDocument.LoadHtml(pageContents);
 
                     //проверка на существование страницы 
-                    if (pageDocument.DocumentNode.SelectSingleNode("//title").InnerText == "Читай-город 404")
+                    if ((pageDocument.DocumentNode.SelectSingleNode("//title")==null)^(pageDocument.DocumentNode.SelectSingleNode("//title").InnerText == "Читай-город 404"))
                     {
                         startId.LastId++;
-                        booksCount++;
+                        parsCount++;
                         continue;
                     }
 
                     //параметры книги 
-                    string bookName, bookAutor, bookPublisher, bookGenre, bookDesc;
+                    var bookName = "Название не найдено";
+                    var bookAutor = "Автор не найден";
+                    var bookPublisher = "Издатель не найден";
+                    var bookGenre = "Жанр не найден";
+                    var bookDesc = "Это книга.";
                     var bookImg = pageDocument.DocumentNode.SelectSingleNode("//div[@class='product__image']//img[@class='lazyload']").Attributes["data-src"].Value;
 
                     //проверка на существование параметров и присвоение их
@@ -66,45 +70,25 @@ namespace WeeebLibrary.Parser
                     {
                         bookName = pageDocument.DocumentNode.SelectSingleNode("//meta[@property='og:title']").Attributes["content"].Value;
                     }
-                    else
-                    {
-                        bookName = "Название не найдено";
-                    }
 
                     if (pageDocument.DocumentNode.SelectSingleNode("//meta[@property='book:author']") != null)
                     {
                         bookAutor = pageDocument.DocumentNode.SelectSingleNode("//meta[@property='book:author']").Attributes["content"].Value;
-                    }
-                    else
-                    {
-                        bookAutor = "Автор не найден";
                     }
 
                     if (pageDocument.DocumentNode.SelectSingleNode("(//div[@class='product-prop__value']//a[@class='link'])[1]") != null)
                     {
                         bookPublisher = pageDocument.DocumentNode.SelectSingleNode("(//div[@class='product-prop__value']//a[@class='link'])[1]").InnerText;
                     }
-                    else
-                    {
-                        bookPublisher = "Издатель не найден";
-                    }
 
                     if (pageDocument.DocumentNode.SelectSingleNode("(//div[@class='container']//span[@itemprop='name'])[4]") != null)
                     {
                         bookGenre = pageDocument.DocumentNode.SelectSingleNode("(//div[@class='container']//span[@itemprop='name'])[4]").InnerText;
                     }
-                    else
-                    {
-                        bookGenre = "Жанр не найден";
-                    }
 
                     if (pageDocument.DocumentNode.SelectSingleNode("//div[@itemprop='description']") != null)
                     {
                         bookDesc = pageDocument.DocumentNode.SelectSingleNode("//div[@itemprop='description']").InnerText;
-                    }
-                    else
-                    {
-                        bookDesc = "Это книга.";
                     }
 
                     //скачивание обложки

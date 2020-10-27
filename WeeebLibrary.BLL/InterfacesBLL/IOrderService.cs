@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
+using WeeebLibrary.BLL.Models;
+using WeeebLibrary.DAL.Database.Entitys;
+using WeeebLibrary.DAL.Enums;
 
 namespace WeeebLibrary.BLL.Interfaces
 {
@@ -14,10 +18,14 @@ namespace WeeebLibrary.BLL.Interfaces
 
         Task<IEnumerable<OrderDTO>> FindCustomerrOders(IEnumerable<OrderDTO> OrdersDto);
 
+        Task<OrderViewModel> FilrterOdersAsync(OrderStatus orderStatus, DateTime min, DateTime max);
+
         void GiveBook(int orderId);
 
         void TakeBook(int orderId);
 
         void DeleteOrder(int id);
+
+        void SaveReport(List<Order> orders);
     }
 }

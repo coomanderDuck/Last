@@ -4,6 +4,7 @@
     width: 100%; /* Ширина таблицы */
     border-spacing: 7px 11px; /* Расстояние между ячейками */
     border-collapse: collapse; /* Убираем двойные линии между ячейками */
+    margin: auto;
 }
 
 td {

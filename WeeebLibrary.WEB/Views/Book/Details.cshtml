@@ -45,7 +45,7 @@
         </dd>
 
     </dl>
-    @if ((User.IsInRole("Клиент")) & (Model.Status == WeeebLibrary.DAL.Enums.Status.Available))
+    @if ((User.IsInRole("Клиент")) & (Model.Status == WeeebLibrary.DAL.Enums.BookStatus.Available))
     {
         <a class="btn btn-outline-light" asp-controller="Order" asp-action="Checkout" asp-route-id="@Model.Id">Забронировать</a>
     }

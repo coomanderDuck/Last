@@ -28,6 +28,6 @@ namespace WeeebLibrary.DAL.Database.Entitys
         public string ImgPath { get; set; }
 
         [Display(Name = "Статус")]
-        public Status Status { set; get; }
+        public BookStatus Status { set; get; }
     }
 }

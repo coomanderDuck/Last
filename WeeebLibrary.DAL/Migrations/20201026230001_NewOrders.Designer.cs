@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WeeebLibrary.DAL.Database;
@@ -9,9 +10,10 @@ using WeeebLibrary.DAL.Database;
 namespace WeeebLibrary.DAL.Migrations
 {
     [DbContext(typeof(LDBContext))]
-    partial class LDBContextModelSnapshot : ModelSnapshot
+    [Migration("20201026230001_NewOrders")]
+    partial class NewOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

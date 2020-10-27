@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.Interfaces;
 using WeeebLibrary.BLL.InterfacesBLL;
+using WeeebLibrary.BLL.Models;
+using WeeebLibrary.DAL.Enums;
 
 namespace WeeebLibrary.Controllers
 {
@@ -52,18 +56,45 @@ namespace WeeebLibrary.Controllers
             return View(OrdersDto);
         }
 
+        [Authorize(Roles = "Библиотекарь")]
+        public async Task<IActionResult> Reports(OrderStatus orderStatus, DateTime minDate, DateTime maxDate, bool save =false)
+        {
+            if (minDate > maxDate) 
+            {
+                ViewBag.DateError = "Некорректный отрезок времени";
+                return View();
+            }
+
+            var orderVM = await orderService.FilrterOdersAsync(orderStatus, minDate, maxDate);
+
+            if (save == true)
+            {
+                orderService.SaveReport(orderVM.Orders);
+            }
+            return View(orderVM);
+        }
+
+        public IActionResult Save()
+        {
+            ViewBag.Message = "Отчёт скачен";
+            return View();
+        }
+
+        [Authorize(Roles = "Библиотекарь")]
         public IActionResult Give(int id)
         {
             orderService.GiveBook(id);
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Библиотекарь")]
         public IActionResult Take(int id)
         {
             orderService.TakeBook(id);
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Клиент")]
         public IActionResult Cancel(int id)
         {
             orderService.DeleteOrder(id);

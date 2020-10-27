@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var nullTime = new DateTime();
 }
 
 <h1>Список брони</h1>
@@ -20,10 +21,13 @@
                 Пользователь
             </th>
             <th>
-                Время заказа
+                Статус заказа
             </th>
             <th>
-                Статус заказа
+                Время бронирования
+            </th>
+            <th>
+                Время выдачи
             </th>
             <th></th>
         </tr>
@@ -42,23 +46,27 @@
                     @Html.DisplayFor(modelItem => item.User.Email)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.OrderTime)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Book.Status)
                 </td>
-
                 <td>
-
-                    @if (User.IsInRole("Библиотекарь") & (item.Book.Status == WeeebLibrary.DAL.Enums.Status.Booked))
+                    @Html.DisplayFor(modelItem => item.BookedTime)
+                </td>
+                <td>
+                    @if (item.TakedTime != nullTime)
+                    {
+                        @Html.DisplayFor(modelItem => item.TakedTime)
+                    }
+                </td>
+                <td>
+                    @if (User.IsInRole("Библиотекарь") & (item.Book.Status == WeeebLibrary.DAL.Enums.BookStatus.Booked))
                     {
                         <a asp-action="Give" asp-route-id="@item.Id" class="btn btn-outline-light">Выдать книгу</a>
                     }
-                    @if (User.IsInRole("Клиент") & (item.Book.Status == WeeebLibrary.DAL.Enums.Status.Booked))
+                    @if (User.IsInRole("Клиент") & (item.Book.Status == WeeebLibrary.DAL.Enums.BookStatus.Booked))
                     {
                         <a asp-action="Cancel" asp-route-id="@item.Id" class="btn btn-outline-light">Снять бронь</a>
                     }
-                    @if ((User.IsInRole("Библиотекарь")) & (item.Book.Status == WeeebLibrary.DAL.Enums.Status.Taked))
+                    @if ((User.IsInRole("Библиотекарь")) & (item.Book.Status == WeeebLibrary.DAL.Enums.BookStatus.Taked))
                     {
                         <a asp-action="Take" asp-route-id="@item.Id" class="btn btn-outline-light">Забрать книгу</a>
                     }

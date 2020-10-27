@@ -20,6 +20,10 @@
                     <a class="nav-link active" asp-action="Index" asp-controller="Home">Домашняя страница</a>
                     <a class="nav-link active" asp-action="Index" asp-controller="Book">Список книг</a>
                     <a class="nav-link active" asp-action="Index" asp-controller="Order">Заказы</a>
+                    @if (User.IsInRole("Библиотекарь"))
+                    {
+                    <a class="nav-link active" asp-action="Reports" asp-controller="Order">Отчёты</a>
+                    }
                 </nav>
             </div>
         </header>

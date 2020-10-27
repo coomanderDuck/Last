@@ -1,43 +1,53 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
 using WeeebLibrary.BLL.Interfaces;
+using WeeebLibrary.BLL.Models;
 using WeeebLibrary.DAL.Database.Entitys;
 using WeeebLibrary.DAL.Enums;
 using WeeebLibrary.DAL.InterfacesDLL;
+using System.Windows;
+using System.Diagnostics;
+using NPOI.SS.UserModel;
 
 namespace WeeebLibrary.Repository
 {
     public class OrderService : IOrderService
     {
         private readonly UserManager<User> userManager;
-        private readonly IRepository<Book> bookRepositiry;
-        private readonly IRepository<Order> orderRepositiry;
+        private readonly IRepository<Book> bookRepository;
+        private readonly IRepository<Order> orderRepository;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public OrderService(IRepository<Book> bookRepositiry, IRepository<Order> orderRepositiry, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
+        public OrderService(IRepository<Book> bookRepository, IRepository<Order> orderRepository, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
         {
-            this.bookRepositiry = bookRepositiry;
-            this.orderRepositiry = orderRepositiry;
+            this.bookRepository = bookRepository;
+            this.orderRepository = orderRepository;
             this.httpContextAccessor = httpContextAccessor;
             this.userManager = userManager;
         }
 
         public OrderDTO GetOrder(int id)
         {
-            var order = orderRepositiry.Get(id);
+            var order = orderRepository.Get(id);
 
             var orderDto = new OrderDTO
             {
                 Id = order.Id,
                 BookId = order.BookId,
                 UserId = order.UserId,
-                OrderTime = order.OrderTime,
+                OrderStatus = order.OrderStatus,
+                BookedTime = order.BookedTime,
+                TakedTime = order.TakedTime,
+                CompletedTime = order.CompletedTime,
+                СanceledTime = order.СanceledTime,
                 Book = order.Book,
                 User = order.User
             };
@@ -46,64 +56,80 @@ namespace WeeebLibrary.Repository
 
         public IEnumerable<OrderDTO> GetOrders()
         {
-            var orders = orderRepositiry.GetAll()
+            var ordersDto = orderRepository.GetAll()
                 .Include(b => b.Book)
                 .Include(b => b.User)
                 .OrderBy(b => b.Book.Name)
+                .Where(b => b.OrderStatus != OrderStatus.Completed)
+                .Where(b => b.OrderStatus != OrderStatus.Сanceled)
                 .Select(b => new OrderDTO
                 {
                     Id = b.Id,
                     BookId = b.BookId,
                     UserId = b.UserId,
-                    OrderTime = b.OrderTime,
+                    OrderStatus = b.OrderStatus,
+                    BookedTime = b.BookedTime,
+                    TakedTime = b.TakedTime,
+                    CompletedTime = b.CompletedTime,
+                    СanceledTime = b.СanceledTime,
                     Book = b.Book,
                     User = b.User
                 })
                 .ToList();
-            return orders;
+
+            return ordersDto;
         }
 
         public async Task MakeOrderAsync(int id)
         {
-            var book = bookRepositiry.Get(id);
+            var book = bookRepository.Get(id);
             var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext.User);
-            if ((book != null) & (book.Status == Status.Available))
+            if ((book != null) & (book.Status == BookStatus.Available))
             {
                 var order = new Order()
                 {
                     BookId = book.Id,
-                    OrderTime = DateTime.Now,
-                    UserId = user.Id
+                    BookedTime = DateTime.Now,
+                    UserId = user.Id,
+                    OrderStatus = OrderStatus.Booked
                 };
-                book.Status = Status.Booked;
-                bookRepositiry.Update(book);
-                await orderRepositiry.CreateAsync(order);
+                book.Status = BookStatus.Booked;
+                bookRepository.Update(book);
+                await orderRepository.CreateAsync(order);
             }
         }
 
         public void GiveBook(int orderId)
         {
-            var order = orderRepositiry.Get(orderId);
-            var book = bookRepositiry.Get(order.BookId);
-            book.Status = Status.Taked;
-            bookRepositiry.Update(book);
+            var order = orderRepository.Get(orderId);
+            var book = bookRepository.Get(order.BookId);
+            book.Status = BookStatus.Taked;
+            order.OrderStatus = OrderStatus.Taked;
+            order.TakedTime = DateTime.Now;
+            bookRepository.Update(book);
+            orderRepository.Update(order);
         }
 
         public void TakeBook(int orderId)
         {
-            var order = orderRepositiry.Get(orderId);
-            var book = bookRepositiry.Get(order.BookId);
-            book.Status = Status.Available;
-            bookRepositiry.Update(book);
-            orderRepositiry.Delete(order);
+            var order = orderRepository.Get(orderId);
+            var book = bookRepository.Get(order.BookId);
+            book.Status = BookStatus.Available;
+            order.OrderStatus = OrderStatus.Completed;
+            order.CompletedTime = DateTime.Now;
+            bookRepository.Update(book);
+            orderRepository.Update(order);
         }
 
         public void DeleteOrder(int id)
         {
-            var order = orderRepositiry.Get(id);
-            var book = bookRepositiry.Get(order.BookId);
-            book.Status = Status.Available;
-            orderRepositiry.Delete(order);
+            var order = orderRepository.Get(id);
+            var book = bookRepository.Get(order.BookId);
+            book.Status = BookStatus.Available;
+            order.OrderStatus = OrderStatus.Сanceled;
+            order.СanceledTime = DateTime.Now;
+            bookRepository.Update(book);
+            orderRepository.Update(order);
         }
 
         public async Task<IEnumerable<OrderDTO>> FindCustomerrOders(IEnumerable<OrderDTO> OrdersDto)
@@ -111,6 +137,126 @@ namespace WeeebLibrary.Repository
             var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext.User);
             OrdersDto = OrdersDto.Where(s => s.UserId.Contains(user.Id));
             return OrdersDto;
+        }
+
+        public async Task<OrderViewModel> FilrterOdersAsync(OrderStatus orderStatus, DateTime min, DateTime max)
+        {
+            var dateNull = new DateTime();
+            var orders = orderRepository.GetAll()
+                                        .Include(b => b.Book)
+                                        .Include(b => b.User)
+                                        .OrderBy(b => b.Book.Name);
+
+            if ((min != dateNull) & (max != dateNull))
+            {
+                orders = orders.Where(c => c.BookedTime >= min && c.BookedTime <= max).OrderBy(b => b.Id);
+            }
+            if (orderStatus != OrderStatus.Any)
+            {
+                orders = orders.Where(s => s.OrderStatus == orderStatus).OrderBy(b => b.Id);
+            }
+
+            var orderVM = new OrderViewModel
+            {
+                Orders = await orders.ToListAsync(),
+                DateMin = min,
+                DateMax = max
+            };
+
+            return orderVM;
+        }
+
+        public void SaveReport(List<Order> orders)
+        {
+            //Рабочая книга Excel
+            XSSFWorkbook wb;
+            //Лист в книге Excel
+            XSSFSheet sh;
+
+            //Создаем рабочую книгу
+            wb = new XSSFWorkbook();
+            //Создаём лист в книге
+            sh = (XSSFSheet)wb.CreateSheet("Лист 1");
+
+            //Заполняемые строки
+            var rows = new List<string> {
+            "Номер брони","Книга","Пользователь","Статус заказа","Время бронирования",
+            "Время выдачи", "Время заврешения заказа", "Время отмены заказа"
+            };
+
+            var i = 1;
+            var j = 0;
+
+            //Создаем строку c заголовками
+            var currentRow = sh.CreateRow(0);
+            foreach (var row in rows)
+            {
+                //в строке создаём ячеёку с указанием столбца
+                var currentCell = currentRow.CreateCell(j);
+                //в ячейку запишем заголовок
+                currentCell.SetCellValue(row);
+                //Выравним размер столбца по содержимому
+                sh.AutoSizeColumn(j);
+                j++;
+            }
+
+            //Запускаем цыкл по строке
+            foreach (var order in orders)
+            {
+                //Создаем строку
+                var currentRoww = sh.CreateRow(i);
+
+                var currentCell = currentRoww.CreateCell(0);//в строке создаём ячеqку с указанием столбца
+                currentCell.SetCellValue(order.Id);//в ячейку запишем информацию
+
+                currentCell = currentRoww.CreateCell(1);
+                currentCell.SetCellValue(order.Book.Name);
+
+                currentCell = currentRoww.CreateCell(2);
+                currentCell.SetCellValue(order.User.Email);
+
+                currentCell = currentRoww.CreateCell(3);
+                switch (order.OrderStatus)
+                {
+                    case OrderStatus.Booked:
+                        currentCell.SetCellValue("Забронирован");
+                        break;
+                    case OrderStatus.Completed:
+                        currentCell.SetCellValue("Завершён");
+                        break;
+                    case OrderStatus.Taked:
+                        currentCell.SetCellValue("Отдан");
+                        break;
+                    case OrderStatus.Сanceled:
+                        currentCell.SetCellValue("Отменён");
+                        break;
+                }
+
+                currentCell = currentRoww.CreateCell(4);
+                currentCell.SetCellValue(order.BookedTime);
+
+                currentCell = currentRoww.CreateCell(5);
+                currentCell.SetCellValue(order.TakedTime);
+
+                currentCell = currentRoww.CreateCell(6);
+                currentCell.SetCellValue(order.CompletedTime);
+
+                currentCell = currentRoww.CreateCell(7);
+                currentCell.SetCellValue(order.СanceledTime);
+
+                //Выравним размер столбца по содержимому
+                sh.AutoSizeColumn(j);
+                i++;
+            }
+            var rnd = new Random();
+            int value = rnd.Next();
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)+ "/" +value + ".xlsx"; 
+
+            //запишем всё в файл
+            using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                wb.Write(fs);
+            }
         }
     }
 }
