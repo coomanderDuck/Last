@@ -8,7 +8,8 @@ namespace WeeebLibrary.BLL.RoleInitializer
     {
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            string adminEmail = "egorcos53@gmail.com";
+            string adminEmail = "admin@gmail.com";
+            string librarianEmail = "librarian@gmail.com";
             string password = "Pass123!";
 
             if (await roleManager.FindByNameAsync("Admin") == null)
@@ -34,6 +35,16 @@ namespace WeeebLibrary.BLL.RoleInitializer
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(Admin, "Admin");
+                }
+            }
+            if (await userManager.FindByNameAsync(librarianEmail) == null)
+            {
+                var librarian = new User { Email = librarianEmail, UserName = librarianEmail };
+                var result = await userManager.CreateAsync(librarian, password);
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(librarian, "Admin");
                 }
             }
         }
