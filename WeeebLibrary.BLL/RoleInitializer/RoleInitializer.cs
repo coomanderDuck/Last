@@ -44,7 +44,7 @@ namespace WeeebLibrary.BLL.RoleInitializer
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(librarian, "Admin");
+                    await userManager.AddToRoleAsync(librarian, "Библиотекарь");
                 }
             }
         }
