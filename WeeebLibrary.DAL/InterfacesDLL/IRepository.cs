@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace WeeebLibrary.DAL.InterfacesDLL
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T>
     {
         T Get(int id);
 

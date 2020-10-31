@@ -17,7 +17,7 @@ namespace WeeebLibrary.DAL.Repository
 
         public IQueryable<Book> GetAll()
         {
-            return lDBContext.Set<Book>().OrderBy(b => b.Name);
+            return lDBContext.Set<Book>().OrderByExp("Name");
         }
 
         public Book Get(int Id) => lDBContext.Book.FirstOrDefault(p => p.Id == Id);

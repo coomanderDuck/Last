@@ -6,10 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
 using WeeebLibrary.BLL.Interfaces;
 using WeeebLibrary.BLL.Models;
+using WeeebLibrary.DAL;
 using WeeebLibrary.DAL.Database;
 using WeeebLibrary.DAL.Database.Entitys;
 using WeeebLibrary.DAL.InterfacesDLL;
@@ -33,35 +35,35 @@ namespace WeeebLibrary.BLL.Services
         public async Task<BookGenreViewModel> FilterBooksAsync(string searchString, string bookAutor, string bookGenre, string bookPublisher)
         {
             IQueryable<string> autorQuery = bookRepository.GetAll()
-                                            .OrderBy(b => b.Autor)
+                                            .OrderByExp("Autor")
                                             .Select(b => b.Autor);
             IQueryable<string> genreQuery = bookRepository.GetAll()
-                                            .OrderBy(b => b.Genre)
+                                            .OrderByExp("Genre")
                                             .Select(b => b.Genre);
             IQueryable<string> publisherQuery = bookRepository.GetAll()
-                                            .OrderBy(b => b.Publisher)
+                                            .OrderByExp("Publisher")
                                             .Select(b => b.Publisher);
 
             var books = bookRepository.GetAll();
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                books = books.Where(s => s.Name.Contains(searchString));
+                books = books.WhereExp("Name", searchString);
             }
 
             if (!string.IsNullOrEmpty(bookAutor))
             {
-                books = books.Where(x => x.Autor == bookAutor);
+                books = books.WhereExp("Autor", bookAutor);
             }
 
             if (!string.IsNullOrEmpty(bookGenre))
             {
-                books = books.Where(x => x.Genre == bookGenre);
+                books = books.WhereExp("Genre", bookGenre);
             }
 
             if (!string.IsNullOrEmpty(bookPublisher))
             {
-                books = books.Where(x => x.Publisher == bookPublisher);
+                books = books.WhereExp("Publisher", bookPublisher);
             }
 
             var bookGenreVM = new BookGenreViewModel

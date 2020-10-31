@@ -16,6 +16,7 @@ using WeeebLibrary.DAL.InterfacesDLL;
 using System.Windows;
 using System.Diagnostics;
 using NPOI.SS.UserModel;
+using WeeebLibrary.DAL;
 
 namespace WeeebLibrary.Repository
 {
@@ -59,7 +60,7 @@ namespace WeeebLibrary.Repository
             var ordersDto = orderRepository.GetAll()
                 .Include(b => b.Book)
                 .Include(b => b.User)
-                .OrderBy(b => b.Book.Name)
+                .OrderByExp("BookedTime")
                 .Where(b => b.OrderStatus != OrderStatus.Completed)
                 .Where(b => b.OrderStatus != OrderStatus.Сanceled)
                 .Select(b => new OrderDTO
@@ -145,15 +146,15 @@ namespace WeeebLibrary.Repository
             var orders = orderRepository.GetAll()
                                         .Include(b => b.Book)
                                         .Include(b => b.User)
-                                        .OrderBy(b => b.Book.Name);
+                                        .OrderByExp("Id");
 
             if ((min != dateNull) & (max != dateNull))
             {
-                orders = orders.Where(c => c.BookedTime >= min && c.BookedTime <= max).OrderBy(b => b.Id);
+                orders = orders.Where(c => c.BookedTime >= min && c.BookedTime <= max).OrderByExp("Id");
             }
             if (orderStatus != OrderStatus.Any)
             {
-                orders = orders.Where(s => s.OrderStatus == orderStatus).OrderBy(b => b.Id);
+                orders = orders.Where(s => s.OrderStatus == orderStatus).OrderByExp("Id");
             }
 
             var orderVM = new OrderViewModel
