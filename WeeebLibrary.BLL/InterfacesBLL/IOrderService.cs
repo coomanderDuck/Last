@@ -26,6 +26,6 @@ namespace WeeebLibrary.BLL.Interfaces
 
         void DeleteOrder(int id);
 
-        void SaveReport(List<Order> orders);
+        string SaveReport(List<Order> orders);
     }
 }

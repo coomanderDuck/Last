@@ -15,6 +15,7 @@ using WeeebLibrary.DAL;
 using WeeebLibrary.DAL.Database.Entitys;
 using WeeebLibrary.DAL.Enums;
 using WeeebLibrary.DAL.InterfacesDLL;
+using Microsoft.AspNetCore.Hosting;
 
 
 namespace WeeebLibrary.Repository
@@ -166,7 +167,7 @@ namespace WeeebLibrary.Repository
             return orderVM;
         }
 
-        public void SaveReport(List<Order> orders)
+        public string SaveReport(List<Order> orders)
         {
             var NullTime = new DateTime();
             //Рабочая книга Excel
@@ -261,13 +262,14 @@ namespace WeeebLibrary.Repository
                 sh.AutoSizeColumn(j);
                 i++;
             }
-            var rnd = new Random();
-            int value = rnd.Next();
-            string path = "wwwroot/Files/Reports/" + value + ".xlsx";
+            var dateTime = DateTime.Now.ToString();
+            var path = "wwwroot/Files/Reports/Отчёт.xlsx";
 
             //запишем всё в файл
             var fs = new FileStream(path, FileMode.Create, FileAccess.Write);
             wb.Write(fs);
+
+            return path;
         }
     }
 }

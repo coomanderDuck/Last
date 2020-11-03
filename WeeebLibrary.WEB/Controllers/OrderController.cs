@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.Interfaces;
@@ -15,12 +17,14 @@ namespace WeeebLibrary.Controllers
         private readonly IBookService bookService;
         private readonly IOrderService orderService;
         private readonly IUserService userServices;
+        private readonly IWebHostEnvironment appEnvironment;
 
-        public OrderController(IBookService bookService, IOrderService orderService, IUserService userServices)
+        public OrderController(IBookService bookService, IOrderService orderService, IUserService userServices, IWebHostEnvironment appEnvironment)
         {
             this.bookService = bookService;
             this.orderService = orderService;
             this.userServices = userServices;
+            this.appEnvironment = appEnvironment;
         }
 
         // Создание брони
@@ -69,7 +73,13 @@ namespace WeeebLibrary.Controllers
 
             if (save == true)
             {
-                orderService.SaveReport(orderVM.Orders);
+                var file_path = orderService.SaveReport(orderVM.Orders);
+                file_path = Path.Combine(appEnvironment.ContentRootPath, file_path);
+                // Тип файла - content-type
+                string file_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                // Имя файла - необязательно
+                string file_name = "Отчёт.xlsx";
+                return PhysicalFile(file_path, file_type, file_name);
             }
             return View(orderVM);
         }
