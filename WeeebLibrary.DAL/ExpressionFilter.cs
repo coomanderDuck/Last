@@ -24,16 +24,35 @@ namespace WeeebLibrary.DAL
             return rezult;
         }
 
-        public static IQueryable<T> WhereExp<T>(this IQueryable<T> source, string propertyName, string propertyValue)
+        public static IQueryable<T> WhereExp<T>(this IQueryable<T> source, string propertyName, string rule, string propertyValue)
         {
             var parameterExp = Expression.Parameter(typeof(T), "type");
-            var propertyExp = Expression.Property(parameterExp, propertyName);
-
-            MethodInfo method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+            var propertyExp = Expression.Property(parameterExp, propertyName);           
             var someValue = Expression.Constant(propertyValue, typeof(string));
-            var containsMethodExp = Expression.Call(propertyExp, method, someValue);
+            Expression<Func<T,bool>> lambda = null;
 
-            var lambda = Expression.Lambda<Func<T, bool>>(containsMethodExp, parameterExp);
+            if (rule == "==")
+            {
+                var equalExpr = Expression.Equal(propertyExp, someValue);
+                lambda = Expression.Lambda<Func<T, bool>>(equalExpr, parameterExp);        
+            }
+            else if (rule == ">")
+            {
+                var greaterThanExpr = Expression.GreaterThan(propertyExp, someValue);
+                lambda = Expression.Lambda<Func<T, bool>>(greaterThanExpr, parameterExp);
+            }
+            else if (rule == "<")
+            {
+                var greaterThanExpr = Expression.LessThanOrEqual(propertyExp, someValue);
+                lambda = Expression.Lambda<Func<T, bool>>(greaterThanExpr, parameterExp);
+            }
+            else
+            {
+                MethodInfo ConMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
+                var containsMethodExp = Expression.Call(propertyExp, ConMethod, someValue);
+                lambda = Expression.Lambda<Func<T, bool>>(containsMethodExp, parameterExp);               
+            };
+
             return source.Where(lambda);
         }
     }

@@ -48,22 +48,22 @@ namespace WeeebLibrary.BLL.Services
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                books = books.WhereExp("Name", searchString);
+                books = books.WhereExp("Name", "Contains", searchString);
             }
 
             if (!string.IsNullOrEmpty(bookAutor))
             {
-                books = books.WhereExp("Autor", bookAutor);
+                books = books.WhereExp("Autor", "Contains", bookAutor);
             }
 
             if (!string.IsNullOrEmpty(bookGenre))
             {
-                books = books.WhereExp("Genre", bookGenre);
+                books = books.WhereExp("Genre", "Contains", bookGenre);
             }
 
             if (!string.IsNullOrEmpty(bookPublisher))
             {
-                books = books.WhereExp("Publisher", bookPublisher);
+                books = books.WhereExp("Publisher", "Contains", bookPublisher);
             }
 
             var bookGenreVM = new BookGenreViewModel
@@ -75,7 +75,7 @@ namespace WeeebLibrary.BLL.Services
             };
             return bookGenreVM;
         }
-
+        
         public BookDTO GetBook(int id)
         {
             var book = bookRepository.Get(id);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NPOI.XSSF.UserModel;
 using System;
@@ -10,13 +11,11 @@ using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
 using WeeebLibrary.BLL.Interfaces;
 using WeeebLibrary.BLL.Models;
+using WeeebLibrary.DAL;
 using WeeebLibrary.DAL.Database.Entitys;
 using WeeebLibrary.DAL.Enums;
 using WeeebLibrary.DAL.InterfacesDLL;
-using System.Windows;
-using System.Diagnostics;
-using NPOI.SS.UserModel;
-using WeeebLibrary.DAL;
+
 
 namespace WeeebLibrary.Repository
 {
@@ -169,6 +168,7 @@ namespace WeeebLibrary.Repository
 
         public void SaveReport(List<Order> orders)
         {
+            var NullTime = new DateTime();
             //Рабочая книга Excel
             XSSFWorkbook wb;
             //Лист в книге Excel
@@ -234,16 +234,28 @@ namespace WeeebLibrary.Repository
                 }
 
                 currentCell = currentRoww.CreateCell(4);
-                currentCell.SetCellValue(order.BookedTime);
+                if (order.BookedTime != NullTime) 
+                {
+                    currentCell.SetCellValue(order.BookedTime.ToString());
+                }
 
                 currentCell = currentRoww.CreateCell(5);
-                currentCell.SetCellValue(order.TakedTime);
+                if (order.TakedTime != NullTime)
+                {
+                    currentCell.SetCellValue(order.TakedTime.ToString());
+                }
 
                 currentCell = currentRoww.CreateCell(6);
-                currentCell.SetCellValue(order.CompletedTime);
+                if (order.CompletedTime != NullTime)
+                {
+                    currentCell.SetCellValue(order.CompletedTime.ToString());
+                }
 
                 currentCell = currentRoww.CreateCell(7);
-                currentCell.SetCellValue(order.СanceledTime);
+                if (order.СanceledTime != NullTime)
+                {
+                    currentCell.SetCellValue(order.СanceledTime.ToString());
+                }
 
                 //Выравним размер столбца по содержимому
                 sh.AutoSizeColumn(j);
@@ -251,13 +263,11 @@ namespace WeeebLibrary.Repository
             }
             var rnd = new Random();
             int value = rnd.Next();
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)+ "/" +value + ".xlsx"; 
+            string path = "wwwroot/Files/Reports/" + value + ".xlsx";
 
             //запишем всё в файл
-            using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write))
-            {
-                wb.Write(fs);
-            }
+            var fs = new FileStream(path, FileMode.Create, FileAccess.Write);
+            wb.Write(fs);
         }
     }
 }
