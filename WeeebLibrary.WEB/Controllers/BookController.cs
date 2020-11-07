@@ -12,6 +12,7 @@ namespace WeeebLibrary.Controllers
     {
         private readonly IOrderService orderService;
         private readonly IBookService bookService;
+        const string librarianRole = "Библиотекарь";
 
         public BookController(IOrderService orderService, IBookService bookService)
         {
@@ -34,7 +35,7 @@ namespace WeeebLibrary.Controllers
         }
 
         //Создание книги
-        [Authorize(Roles = "Библиотекарь")]
+        [Authorize(Roles = librarianRole)]
         public IActionResult Create()
         {
             return View();
@@ -53,7 +54,7 @@ namespace WeeebLibrary.Controllers
         }
 
         // Изменение книги
-        [Authorize(Roles = "Библиотекарь")]
+        [Authorize(Roles = librarianRole)]
         public IActionResult Edit(int id)
         {
             var book = bookService.GetBook(id);
@@ -96,7 +97,7 @@ namespace WeeebLibrary.Controllers
         }
 
         //Удаление книги
-        [Authorize(Roles = "Библиотекарь")]
+        [Authorize(Roles = librarianRole)]
         public IActionResult Delete(int id)
         {
             var book = bookService.GetBook(id);

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NPOI.Util;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,6 @@ using WeeebLibrary.DAL;
 using WeeebLibrary.DAL.Database.Entitys;
 using WeeebLibrary.DAL.Enums;
 using WeeebLibrary.DAL.InterfacesDLL;
-using Microsoft.AspNetCore.Hosting;
 
 
 namespace WeeebLibrary.Repository
@@ -167,7 +166,7 @@ namespace WeeebLibrary.Repository
             return orderVM;
         }
 
-        public string SaveReport(List<Order> orders)
+        public MemoryStream SaveReport(List<Order> orders)
         {
             var NullTime = new DateTime();
             //Рабочая книга Excel
@@ -235,7 +234,7 @@ namespace WeeebLibrary.Repository
                 }
 
                 currentCell = currentRoww.CreateCell(4);
-                if (order.BookedTime != NullTime) 
+                if (order.BookedTime != NullTime)
                 {
                     currentCell.SetCellValue(order.BookedTime.ToString());
                 }
@@ -262,14 +261,20 @@ namespace WeeebLibrary.Repository
                 sh.AutoSizeColumn(j);
                 i++;
             }
-            var dateTime = DateTime.Now.ToString();
-            var path = "wwwroot/Files/Reports/Отчёт.xlsx";
 
-            //запишем всё в файл
-            var fs = new FileStream(path, FileMode.Create, FileAccess.Write);
-            wb.Write(fs);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            try
+            {
+                wb.Write(bos);
+            }
+            finally
+            {
+                bos.Close();
+            }
+            byte[] bytes = bos.ToByteArray();
+            var memoryStream = new MemoryStream(bytes);
 
-            return path;
+            return memoryStream;
         }
     }
 }

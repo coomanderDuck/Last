@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
 using WeeebLibrary.BLL.Models;
@@ -26,6 +27,6 @@ namespace WeeebLibrary.BLL.Interfaces
 
         void DeleteOrder(int id);
 
-        string SaveReport(List<Order> orders);
+        MemoryStream SaveReport(List<Order> orders);
     }
 }

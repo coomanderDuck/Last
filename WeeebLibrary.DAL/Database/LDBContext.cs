@@ -17,8 +17,7 @@ namespace WeeebLibrary.DAL.Database
         public LDBContext(DbContextOptions<LDBContext> options)
                 : base(options)
         {
-            //Database.Migrate();
+            Database.Migrate();
         }
     }
-
 }

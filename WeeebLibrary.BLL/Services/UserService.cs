@@ -16,8 +16,9 @@ namespace WeeebLibrary.BLL.Services
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IHttpContextAccessor httpContextAccessor;
-        RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IMapper mapper;
+        const string clientRole = "Клиент";
 
         public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
@@ -35,7 +36,7 @@ namespace WeeebLibrary.BLL.Services
         public async Task RegisterUsersAsync(UserDTO userDto)
         {
             var user = await userManager.FindByIdAsync(userDto.Id);
-            await userManager.AddToRoleAsync(user, "Клиент");
+            await userManager.AddToRoleAsync(user, clientRole);
             await signInManager.SignInAsync(user, false);
         }
 
@@ -48,8 +49,7 @@ namespace WeeebLibrary.BLL.Services
 
         public User NewUser(UserDTO userDto)
         {
-            var user = new User { Id = userDto.Id, Email = userDto.Email, UserName = userDto.Email, Name = userDto.Name, SecondName = userDto.SecondName, Phone = userDto.Phone };
-            return user;
+            return mapper.Map<UserDTO, User>(userDto);
         }
 
         public async Task<SignInResult> SignInUserAsync(Login model)
@@ -66,7 +66,7 @@ namespace WeeebLibrary.BLL.Services
         public async Task AddToRoleAsync(UserDTO userDto)
         {
             var user = NewUser(userDto);
-            await userManager.AddToRoleAsync(user, "Клиент");
+            await userManager.AddToRoleAsync(user, clientRole);
         }
 
         public async Task<UserDTO> GetUserAsync(string id)
@@ -78,10 +78,12 @@ namespace WeeebLibrary.BLL.Services
         public async Task<IdentityResult> EditUserAsync(EditUserViewModel model, string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
-            user.Email = model.Email;
-            user.UserName = model.Email;
-            user.SecondName = model.SecondName;
+            mapper.Map(model, user);
+
+            //user = mapper.Map<EditUserViewModel, User>(model); //меняется айди
+
             var result = await userManager.UpdateAsync(user);
+
             return result;
         }
 
@@ -90,13 +92,14 @@ namespace WeeebLibrary.BLL.Services
             var user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
-                IdentityResult result = await userManager.DeleteAsync(user);
+                await userManager.DeleteAsync(user);
             }
         }
 
         public async Task<IdentityResult> ChangeUserPasswordAsync(ChangePasswordViewModel model, string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
+
             var _passwordValidator =
                        httpContextAccessor.HttpContext.RequestServices.GetService(typeof(IPasswordValidator<User>)) as IPasswordValidator<User>;
             var _passwordHasher =
@@ -118,13 +121,10 @@ namespace WeeebLibrary.BLL.Services
             // получем список ролей пользователя
             var userRoles = await userManager.GetRolesAsync(user);
             var allRoles = roleManager.Roles.ToList();
-            var model = new ChangeRoleViewModel
-            {
-                UserId = userDto.Id,
-                UserEmail = userDto.Email,
-                UserRoles = userRoles,
-                AllRoles = allRoles
-            };
+            var model = mapper.Map<UserDTO, ChangeRoleViewModel>(userDto);
+            model.UserRoles = userRoles;
+            model.AllRoles = allRoles;
+
             return model;
         }
 
@@ -141,9 +141,6 @@ namespace WeeebLibrary.BLL.Services
             // получем список ролей пользователя
             var userRoles = await userManager.GetRolesAsync(user);
 
-            // получаем все роли
-            var allRoles = roleManager.Roles.ToList();
-
             // получаем список ролей, которые были добавлены
             var addedRoles = roles.Except(userRoles);
 
@@ -157,8 +154,7 @@ namespace WeeebLibrary.BLL.Services
         public async Task<UserDTO> GetTheUser()
         {
             var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext.User);
-            var userDto = new UserDTO { Email = user.Email, UserName = user.Email, Name = user.Name, SecondName = user.SecondName, Phone = user.Phone };
-            return userDto;
+            return mapper.Map<User, UserDTO>(user);
         }
     }
 }

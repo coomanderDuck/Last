@@ -39,12 +39,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Files\Reports\" />
+    <ProjectReference Include="..\Parser\Parser.csproj" />
+    <ProjectReference Include="..\WeeebLibrary.BLL\WeeebLibrary.BLL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Parser\Parser.csproj" />
-    <ProjectReference Include="..\WeeebLibrary.BLL\WeeebLibrary.BLL.csproj" />
+    <Folder Include="wwwroot\Files\" />
   </ItemGroup>
 
 </Project>

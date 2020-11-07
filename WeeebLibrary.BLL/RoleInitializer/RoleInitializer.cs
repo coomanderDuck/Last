@@ -8,33 +8,36 @@ namespace WeeebLibrary.BLL.RoleInitializer
     {
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            string adminEmail = "admin@gmail.com";
-            string librarianEmail = "librarian@gmail.com";
-            string password = "Pass123!";
+            const string adminRole = "Admin";
+            const string librarianRole = "Библиотекарь";
+            const string clientRole = "Клиент";
+            const string adminEmail = "admin@gmail.com";
+            const string librarianEmail = "librarian@gmail.com";
+            const string password = "Pass123!";
 
-            if (await roleManager.FindByNameAsync("Admin") == null)
+            if (await roleManager.FindByNameAsync(adminRole) == null)
             {
-                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await roleManager.CreateAsync(new IdentityRole(adminRole));
             }
 
-            if (await roleManager.FindByNameAsync("Библиотекарь") == null)
+            if (await roleManager.FindByNameAsync(librarianRole) == null)
             {
-                await roleManager.CreateAsync(new IdentityRole("Библиотекарь"));
+                await roleManager.CreateAsync(new IdentityRole(librarianRole));
             }
 
-            if (await roleManager.FindByNameAsync("Клиент") == null)
+            if (await roleManager.FindByNameAsync(clientRole) == null)
             {
-                await roleManager.CreateAsync(new IdentityRole("Клиент"));
+                await roleManager.CreateAsync(new IdentityRole(clientRole));
             }
 
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
-                var Admin = new User { Email = adminEmail, UserName = adminEmail };
-                var result = await userManager.CreateAsync(Admin, password);
+                var admin = new User { Email = adminEmail, UserName = adminEmail };
+                var result = await userManager.CreateAsync(admin, password);
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(Admin, "Admin");
+                    await userManager.AddToRoleAsync(admin, adminRole);
                 }
             }
             if (await userManager.FindByNameAsync(librarianEmail) == null)
@@ -44,7 +47,7 @@ namespace WeeebLibrary.BLL.RoleInitializer
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(librarian, "Библиотекарь");
+                    await userManager.AddToRoleAsync(librarian, librarianRole);
                 }
             }
         }

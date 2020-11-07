@@ -18,6 +18,8 @@ namespace WeeebLibrary.Controllers
         private readonly IOrderService orderService;
         private readonly IUserService userServices;
         private readonly IWebHostEnvironment appEnvironment;
+        const string librarianRole = "Библиотекарь";
+        const string clientRole = "Клиент";
 
         public OrderController(IBookService bookService, IOrderService orderService, IUserService userServices, IWebHostEnvironment appEnvironment)
         {
@@ -49,7 +51,7 @@ namespace WeeebLibrary.Controllers
         public async Task<IActionResult> Index()
         {
             var OrdersDto = orderService.GetOrders();
-            if (User.IsInRole("Клиент"))
+            if (User.IsInRole(clientRole))
             {
                 OrdersDto = await orderService.FindCustomerrOders(OrdersDto);
             }
@@ -60,7 +62,7 @@ namespace WeeebLibrary.Controllers
             return View(OrdersDto);
         }
 
-        [Authorize(Roles = "Библиотекарь")]
+        [Authorize(Roles = librarianRole)]
         public async Task<IActionResult> Reports(OrderStatus orderStatus, DateTime minDate, DateTime maxDate, bool save =false)
         {
             if (minDate > maxDate) 
@@ -73,13 +75,10 @@ namespace WeeebLibrary.Controllers
 
             if (save == true)
             {
-                var file_path = orderService.SaveReport(orderVM.Orders);
-                file_path = Path.Combine(appEnvironment.ContentRootPath, file_path);
-                // Тип файла - content-type
-                string file_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                // Имя файла - необязательно
+                var memoryStream = orderService.SaveReport(orderVM.Orders);
                 string file_name = "Отчёт.xlsx";
-                return PhysicalFile(file_path, file_type, file_name);
+                string file_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                return File(memoryStream, file_type, file_name);
             }
             return View(orderVM);
         }
@@ -90,21 +89,21 @@ namespace WeeebLibrary.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Библиотекарь")]
+        [Authorize(Roles = librarianRole)]
         public IActionResult Give(int id)
         {
             orderService.GiveBook(id);
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Библиотекарь")]
+        [Authorize(Roles = librarianRole)]
         public IActionResult Take(int id)
         {
             orderService.TakeBook(id);
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Клиент")]
+        [Authorize(Roles = clientRole)]
         public IActionResult Cancel(int id)
         {
             orderService.DeleteOrder(id);

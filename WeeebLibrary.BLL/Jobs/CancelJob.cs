@@ -24,29 +24,27 @@ namespace WeeebLibrary.BLL.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            using (var scope = serviceProvider.CreateScope())
+            using var scope = serviceProvider.CreateScope();
+            var orderRepository = scope.ServiceProvider.GetService<IRepository<Order>>();
+            var bookRepository = scope.ServiceProvider.GetService<IRepository<Book>>();
+            var orders = orderRepository.GetAll()
+          .Include(b => b.Book)
+          .ToList();
+            if (orders != null)
             {
-                var orderRepository = scope.ServiceProvider.GetService<IRepository<Order>>();
-                var bookRepository = scope.ServiceProvider.GetService<IRepository<Book>>();
-                var orders = orderRepository.GetAll()
-              .Include(b => b.Book)
-              .ToList();
-                if (orders != null)
+                foreach (var order in orders.
+                    Where(c => c.Book.Status == BookStatus.Booked).
+                    Where(c => c.BookedTime.AddDays(7) <= DateTime.Now)) //Через неделю забронированный заказ отменяется
                 {
-                    foreach (var order in orders.
-                        Where(c => c.Book.Status == BookStatus.Booked).
-                        Where(c => c.BookedTime.AddDays(7) <= DateTime.Now)) //Через неделю забронированный заказ отменяется
-                    {
-                        var book = bookRepository.Get(order.BookId);
-                        book.Status = BookStatus.Available;
-                        order.OrderStatus = OrderStatus.Сanceled;
-                        bookRepository.Update(book);
-                        orderRepository.Update(order);
-                        logger.LogInformation("Заказ книги " + order.Book.Name + "отменён по истечению времени ожидания");
-                    }
+                    var book = bookRepository.Get(order.BookId);
+                    book.Status = BookStatus.Available;
+                    order.OrderStatus = OrderStatus.Сanceled;
+                    bookRepository.Update(book);
+                    orderRepository.Update(order);
+                    logger.LogInformation("Заказ книги " + order.Book.Name + "отменён по истечению времени ожидания");
                 }
-                await Task.CompletedTask;
             }
+            await Task.CompletedTask;
         }
     }
 }

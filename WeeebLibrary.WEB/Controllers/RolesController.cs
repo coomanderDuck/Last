@@ -11,7 +11,7 @@ namespace WeeebLibrary.Controllers
     [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
-        RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IUserService userServices;
 
         public RolesController(RoleManager<IdentityRole> roleManager, IUserService userServices)
