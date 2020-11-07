@@ -96,22 +96,11 @@ namespace WeeebLibrary.BLL.Services
             }
         }
 
-        public async Task<IdentityResult> ChangeUserPasswordAsync(ChangePasswordViewModel model, string userId)
+        public async Task<IdentityResult> ChangeUserPasswordAsync(ChangePasswordViewModel model)
         {
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(model.Id);
+            var result = await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
 
-            var _passwordValidator =
-                       httpContextAccessor.HttpContext.RequestServices.GetService(typeof(IPasswordValidator<User>)) as IPasswordValidator<User>;
-            var _passwordHasher =
-                        httpContextAccessor.HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) as IPasswordHasher<User>;
-            var result =
-                await _passwordValidator.ValidateAsync(userManager, user, model.NewPassword);
-
-            if (result.Succeeded)
-            {
-                user.PasswordHash = _passwordHasher.HashPassword(user, model.NewPassword);
-                await userManager.UpdateAsync(user);
-            }
             return result;
         }
 

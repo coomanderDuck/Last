@@ -32,6 +32,6 @@ namespace WeeebLibrary.BLL.InterfacesBLL
 
         Task<SignInResult> SignInUserAsync(Login model);
 
-        Task<IdentityResult> ChangeUserPasswordAsync(ChangePasswordViewModel model, string userId);
+        Task<IdentityResult> ChangeUserPasswordAsync(ChangePasswordViewModel model);
     }
 }

@@ -103,6 +103,7 @@ namespace WeeebLibrary.Controllers
         }
 
         [HttpPost]
+
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -110,7 +111,7 @@ namespace WeeebLibrary.Controllers
                 var userDto = await userServices.GetUserAsync(model.Id);
                 if (userDto != null)
                 {
-                    var result = await userServices.ChangeUserPasswordAsync(model, userDto.Id);
+                    var result = await userServices.ChangeUserPasswordAsync(model);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Index");
