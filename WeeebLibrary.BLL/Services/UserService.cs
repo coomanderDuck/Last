@@ -16,7 +16,7 @@ namespace WeeebLibrary.BLL.Services
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<IdentityRole> roleManager; 
         private readonly IMapper mapper;
         const string clientRole = "Клиент";
 

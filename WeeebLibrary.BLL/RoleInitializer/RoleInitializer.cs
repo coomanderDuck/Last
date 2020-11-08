@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using WeeebLibrary.DAL.Database.Entitys;
 
 namespace WeeebLibrary.BLL.RoleInitializer
 {
-    public class RoleInitializer
+    public class RoleInitializerService
     {
+
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             const string adminRole = "Admin";

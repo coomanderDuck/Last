@@ -17,6 +17,7 @@ namespace WeeebLibrary.BLL.MappingProfiles
             CreateMap<EditUserViewModel, User>()
                 .ForMember("UserName", opt => opt.MapFrom(c => c.Email))
                 .ForMember("Id", config => config.Ignore());
+            CreateMap<CreateUserViewModel, UserDTO>();
         }
     }
 }

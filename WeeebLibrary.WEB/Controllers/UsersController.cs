@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WeeebLibrary.BLL.DTO;
@@ -10,11 +11,13 @@ namespace WeeebLibrary.Controllers
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
+        private readonly IMapper mapper;
         private readonly IUserService userServices;
 
-        public UsersController(IUserService userServices)
+        public UsersController(IUserService userServices, IMapper mapper)
         {
             this.userServices = userServices;
+            this.mapper = mapper;
         }
 
         public IActionResult Index() => View(userServices.ToListUsers());
@@ -26,7 +29,7 @@ namespace WeeebLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userDto = new UserDTO { Email = model.Email, UserName = model.Email, Name = model.Name, SecondName = model.SecondName, Phone = model.Phone };
+                var userDto = mapper.Map<CreateUserViewModel, UserDTO>(model);
                 var result = await userServices.CreateUserAsync(userDto, model.Password);
 
                 if (result.Succeeded)
@@ -54,7 +57,7 @@ namespace WeeebLibrary.Controllers
                 return NotFound();
             }
 
-            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Email = user.Email, SecondName = user.SecondName };
+            var model = new EditUserViewModel { Id = user.Id, Email = user.Email, SecondName = user.SecondName };
             return View(model);
         }
 
@@ -98,12 +101,11 @@ namespace WeeebLibrary.Controllers
             {
                 return NotFound();
             }
-            ChangePasswordViewModel model = new ChangePasswordViewModel { Id = userDTO.Id, Email = userDTO.Email };
+            var model = new ChangePasswordViewModel { Id = userDTO.Id, Email = userDTO.Email };
             return View(model);
         }
 
         [HttpPost]
-
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)

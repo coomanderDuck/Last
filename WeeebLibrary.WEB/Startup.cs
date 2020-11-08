@@ -45,8 +45,8 @@ namespace WeeebLibrary
             services.AddSingleton(new JobSchedule(
                 jobType: typeof(BookParser),
                 cronExpression: "0 33 20 1/1 * ? *"));  //Запускать каждый день 
-          services.AddHostedService<QuartzHostedService>();
-
+          services.AddHostedService<QuartzHostedService>(); 
+          services.AddHostedService<InitializerHostedService>();
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -63,7 +63,7 @@ namespace WeeebLibrary
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -87,8 +87,6 @@ namespace WeeebLibrary
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            await CallRoleInitializer.RoleInitializeAsync(app);
         }
     }
 }
