@@ -8,7 +8,7 @@ namespace WeeebLibrary.BLL.InterfacesBLL
 {
     public interface IUserService
     {
-        Task AddToRoleAsync(UserDTO userDto);
+        Task AddToRoleAsync(string id);
         List<UserDTO> ToListUsers();
         Task<IList<string>> GetUsersRolesAsync(UserDTO userDto);
 

@@ -63,9 +63,9 @@ namespace WeeebLibrary.BLL.Services
             await signInManager.SignOutAsync();
         }
 
-        public async Task AddToRoleAsync(UserDTO userDto)
+        public async Task AddToRoleAsync(string id)
         {
-            var user = NewUser(userDto);
+            var user = await userManager.FindByIdAsync(id);
             await userManager.AddToRoleAsync(user, clientRole);
         }
 
