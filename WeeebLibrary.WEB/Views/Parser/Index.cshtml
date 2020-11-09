@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "View";
+}
+
+    <div class="form-group">
+        <form method="post" asp-controller="Parser" asp-action="Parser">
+            <p>
+                Колличество книг: <input type="text" name="parsCount" class="lead">
+            </p>
+            <input type="submit" value="Запуск парсера" class="lead" />
+        </form>
+    </div>
+

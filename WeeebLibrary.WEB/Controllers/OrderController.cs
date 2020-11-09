@@ -83,12 +83,6 @@ namespace WeeebLibrary.Controllers
             return View(orderVM);
         }
 
-        public IActionResult Save()
-        {
-            ViewBag.Message = "Отчёт скачен";
-            return View();
-        }
-
         [Authorize(Roles = librarianRole)]
         public IActionResult Give(int id)
         {

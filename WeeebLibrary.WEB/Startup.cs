@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Parser;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
@@ -32,21 +33,24 @@ namespace WeeebLibrary
             //подключение коллекции сервисов из класса MyConfigServiceCollection
             services.AddMyConfig(Configuration);
 
+            services.AddTransient<IParserBooks, ParserBooks>();
+
             // Добавляем Quartz services
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 
             // Добавляем our job
             services.AddSingleton<CancelJob>();
-            services.AddSingleton<BookParser>();
+            services.AddSingleton<BookParserJob>();
             services.AddSingleton(new JobSchedule(
                jobType: typeof(CancelJob),
                cronExpression: "0 0/1 * 1/1 * ? *")); // Запускать каждую минуту
             services.AddSingleton(new JobSchedule(
-                jobType: typeof(BookParser),
-                cronExpression: "0 33 20 1/1 * ? *"));  //Запускать каждый день 
+                jobType: typeof(BookParserJob),
+                cronExpression: "0 36 3 1/1 * ? *"));  //Запускать каждый день 
           services.AddHostedService<QuartzHostedService>(); 
           services.AddHostedService<InitializerHostedService>();
+
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
             {

@@ -22,7 +22,11 @@
                     <a class="nav-link active" asp-action="Index" asp-controller="Order">Заказы</a>
                     @if (User.IsInRole("Библиотекарь"))
                     {
-                        <a class="nav-link active" asp-action="Reports" asp-controller="Order">Отчёты</a>
+                    <a class="nav-link active" asp-action="Reports" asp-controller="Order">Отчёты</a>
+                    }
+                    @if (User.IsInRole("Библиотекарь"))
+                    {
+                    <a class="nav-link active" asp-action="Index" asp-controller="Parser">Парсер</a>
                     }
                 </nav>
             </div>
