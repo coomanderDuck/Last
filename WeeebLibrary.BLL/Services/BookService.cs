@@ -82,12 +82,6 @@ namespace WeeebLibrary.BLL.Services
             return mapper.Map<Book, BookDTO>(book);
         }
 
-        public IEnumerable<BookDTO> GetBooks()
-        {
-            // применяем автомаппер для проекции одной коллекции на другую
-            return mapper.Map<IEnumerable<Book>, List<BookDTO>>(bookRepository.GetAll());
-        }
-
         public async Task CreateBookAsync(BookDTO bookDto, IFormFile uploadedFile)
         {
             // путь к папке Files
@@ -112,12 +106,6 @@ namespace WeeebLibrary.BLL.Services
             };
 
             await bookRepository.CreateAsync(book);
-        }
-
-        public void CreateParsBook(BookDTO bookDto)
-        {
-            var book = mapper.Map<BookDTO, Book>(bookDto);
-            bookRepository.CreateAsync(book);
         }
 
         public async Task EditBookAsync(BookDTO bookDto, IFormFile uploadedFile)

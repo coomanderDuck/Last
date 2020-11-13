@@ -117,12 +117,6 @@ namespace WeeebLibrary.BLL.Services
             return model;
         }
 
-        public async Task<IList<string>> GetUsersRolesAsync(UserDTO userDto)
-        {
-            var user = NewUser(userDto);
-            var userRoles = await userManager.GetRolesAsync(user);
-            return userRoles;
-        }
         public async Task EditUserRolesAsync(string userId, List<string> roles)
         {
             var user = await userManager.FindByIdAsync(userId);
@@ -140,11 +134,6 @@ namespace WeeebLibrary.BLL.Services
             await userManager.RemoveFromRolesAsync(user, removedRoles);
         }
 
-        public async Task<UserDTO> GetTheUser()
-        {
-            var user = await userManager.GetUserAsync(httpContextAccessor.HttpContext.User);
-            return mapper.Map<User, UserDTO>(user);
-        }
     }
 }
 

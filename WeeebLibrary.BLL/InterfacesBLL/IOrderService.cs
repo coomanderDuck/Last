@@ -11,8 +11,6 @@ namespace WeeebLibrary.BLL.Interfaces
 {
     public interface IOrderService
     {
-        OrderDTO GetOrder(int id);
-
         IEnumerable<OrderDTO> GetOrders();
 
         Task MakeOrderAsync(int id);

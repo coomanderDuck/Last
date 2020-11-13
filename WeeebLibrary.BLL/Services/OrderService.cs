@@ -34,26 +34,6 @@ namespace WeeebLibrary.Repository
             this.userManager = userManager;
         }
 
-        public OrderDTO GetOrder(int id)
-        {
-            var order = orderRepository.Get(id);
-
-            var orderDto = new OrderDTO
-            {
-                Id = order.Id,
-                BookId = order.BookId,
-                UserId = order.UserId,
-                OrderStatus = order.OrderStatus,
-                BookedTime = order.BookedTime,
-                TakedTime = order.TakedTime,
-                CompletedTime = order.CompletedTime,
-                СanceledTime = order.СanceledTime,
-                Book = order.Book,
-                User = order.User
-            };
-            return orderDto;
-        }
-
         public IEnumerable<OrderDTO> GetOrders()
         {
             var ordersDto = orderRepository.GetAll()

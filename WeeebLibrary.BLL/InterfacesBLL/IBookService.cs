@@ -12,11 +12,7 @@ namespace WeeebLibrary.BLL.Interfaces
 
         BookDTO GetBook(int id);
 
-        IEnumerable<BookDTO> GetBooks();
-
         Task CreateBookAsync(BookDTO bookDto, IFormFile uploadedFile);
-
-        void CreateParsBook(BookDTO bookDto);
 
         Task EditBookAsync(BookDTO bookDto, IFormFile uploadedFile);
 

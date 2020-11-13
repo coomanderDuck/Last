@@ -9,8 +9,8 @@ namespace WeeebLibrary.BLL.InterfacesBLL
     public interface IUserService
     {
         Task AddToRoleAsync(string id);
+
         List<UserDTO> ToListUsers();
-        Task<IList<string>> GetUsersRolesAsync(UserDTO userDto);
 
         Task EditUserRolesAsync(string userId, List<string> roles);
 
@@ -19,8 +19,6 @@ namespace WeeebLibrary.BLL.InterfacesBLL
         Task DeleteUserAsync(string id);
 
         Task SignOutUserAsync();
-
-        Task<UserDTO> GetTheUser();
 
         Task<ChangeRoleViewModel> EditRolesAsync(UserDTO userDto);
 
