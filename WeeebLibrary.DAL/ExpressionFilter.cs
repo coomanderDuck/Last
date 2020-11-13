@@ -29,7 +29,7 @@ namespace WeeebLibrary.DAL
             var parameterExp = Expression.Parameter(typeof(T), "type");
             var propertyExp = Expression.Property(parameterExp, propertyName);           
             var someValue = Expression.Constant(propertyValue, typeof(string));
-            Expression<Func<T,bool>> lambda = null;
+            Expression<Func<T,bool>> lambda;
 
             if (rule == "==")
             {

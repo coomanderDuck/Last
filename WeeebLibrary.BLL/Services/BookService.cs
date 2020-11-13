@@ -32,7 +32,7 @@ namespace WeeebLibrary.BLL.Services
         }
 
         //Фильтрация книг
-        public async Task<BookGenreViewModel> FilterBooksAsync(string searchString, string bookAutor, string bookGenre, string bookPublisher)
+        public async Task<BookGenreViewModel> FilterBooksAsync(string searchString, string bookAutor, string bookGenre, string bookPublisher, string sortedString)
         {
             IQueryable<string> autorQuery = bookRepository.GetAll()
                                             .OrderByExp("Autor")
@@ -64,6 +64,10 @@ namespace WeeebLibrary.BLL.Services
             if (!string.IsNullOrEmpty(bookPublisher))
             {
                 books = books.WhereExp("Publisher", "Contains", bookPublisher);
+            }
+            if (sortedString!=null)
+            {
+                books = books.OrderByExp(sortedString);
             }
 
             var bookGenreVM = new BookGenreViewModel

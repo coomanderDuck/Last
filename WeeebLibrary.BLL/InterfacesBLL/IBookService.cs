@@ -8,7 +8,7 @@ namespace WeeebLibrary.BLL.Interfaces
 {
     public interface IBookService
     {
-        Task<BookGenreViewModel> FilterBooksAsync(string searchString, string bookAutor, string bookGenre, string bookPublisher);
+        Task<BookGenreViewModel> FilterBooksAsync(string searchString, string bookAutor, string bookGenre, string bookPublisher, string sortedString);
 
         BookDTO GetBook(int id);
 

@@ -20,10 +20,10 @@ namespace WeeebLibrary.Controllers
             this.bookService = bookService;
         }
 
-        public async Task<IActionResult> Index(string searchString, string bookAutor, string bookGenre, string bookPublisher)
+        public async Task<IActionResult> Index(string searchString, string bookAutor, string bookGenre, string bookPublisher, string sortedString)
         {
             //Фильтрация
-            var bookGenreVM = await bookService.FilterBooksAsync(searchString, bookAutor, bookGenre, bookPublisher);
+            var bookGenreVM = await bookService.FilterBooksAsync(searchString, bookAutor, bookGenre, bookPublisher, sortedString);
             return View(bookGenreVM);
         }
 

@@ -15,7 +15,7 @@
 }
 
 <form asp-controller="Book" asp-action="Index" method="get">
-    
+
     <p>
         <select asp-for="BookAutor" asp-items="Model.Autor" class="lead">
             <option value="">Любой автор</option>
@@ -31,68 +31,69 @@
         Название:<input type="text" name="SearchString" class="lead">
         <input type="submit" value="Найти" class="btn btn-outline-light" />
     </p>
+
+
+    <table class="lead">
+        <thead>
+            <tr>
+                <th>
+                    <button type="submit" value="Name" name="sortedString" class="btn btn-light"> Название </button>
+                </th>
+                <th>
+                    <button type="submit" value="Autor" name="sortedString" class="btn btn-light"> Автор</button>
+                </th>
+                <th>
+                    <button type="submit" value="Genre" name="sortedString" class="btn btn-light">Жанр</button>
+</th>
+                <th>
+                    <button type="submit" value="Publisher" name="sortedString" class="btn btn-light"> Издательство</button>
+</th>
+                <th>
+                    <button type="submit" value="Status" name="sortedString" class="btn btn-light"> Статус</button>
+</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Books)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Autor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Genre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Publisher)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                    <td>
+                        <p>
+                            @if ((item.Status == WeeebLibrary.DAL.Enums.BookStatus.Available) & (User.IsInRole("Клиент")))
+                            {
+                                <a asp-controller="Order" asp-action="Checkout" asp-route-id="@item.Id" class="btn btn-outline-light">Забронировать</a>
+                            }
+
+                            @if (User.IsInRole("Библиотекарь"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-light">Изменить</a>
+                            }
+
+                            @if (User.IsInRole("Библиотекарь"))
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-light">Удалить</a>
+                            }
+                        </p>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </form>
-
-<table class="lead">
-    <thead>
-        <tr>
-            <th>
-                Название
-            </th>
-            <th>
-                Автор
-            </th>
-            <th>
-                Жанр
-            </th>
-            <th>
-                Издательство
-            </th>
-            <th>
-                Статус
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Books)
-        {
-        <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Name)</a>
-</td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Autor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Publisher)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-
-            <td>
-                <p>
-                    @if((item.Status == WeeebLibrary.DAL.Enums.BookStatus.Available)&(User.IsInRole("Клиент")))
-                    {
-                        <a asp-controller="Order" asp-action="Checkout" asp-route-id="@item.Id" class="btn btn-outline-light">Забронировать</a>
-                    }
-
-                    @if (User.IsInRole("Библиотекарь"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-light">Изменить</a>
-                    }
-                    
-                    @if (User.IsInRole("Библиотекарь"))
-                    {
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-light">Удалить</a>
-                    }
-                </p>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>

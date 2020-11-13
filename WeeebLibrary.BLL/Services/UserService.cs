@@ -15,17 +15,15 @@ namespace WeeebLibrary.BLL.Services
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly RoleManager<IdentityRole> roleManager; 
         private readonly IMapper mapper;
         const string clientRole = "Клиент";
 
-        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor, IMapper mapper)
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
-            this.httpContextAccessor = httpContextAccessor;
             this.mapper = mapper;
         }
         public List<UserDTO> ToListUsers()
