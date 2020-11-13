@@ -30,6 +30,7 @@ namespace Parser
             var books = bookRepository.GetAll();
             var httpСlient = clientFactory.CreateClient();
             var startId = lastRepository.Get();
+            var b = 0;
 
             if (startId == null)
             {
@@ -88,7 +89,7 @@ namespace Parser
                 }
 
                 //скачивание обложки
-                var path = "/Files/" + bookName + ".jpg";
+                var path = "/Files/" + bookName.Replace("/", "") + ".jpg";
                 var localFilename = "wwwroot" + path;
                 var webClient = new WebClient();
                 {
@@ -109,7 +110,8 @@ namespace Parser
                 await bookRepository.CreateAsync(book);
                 startId.LastId++;
                 lastRepository.Update(startId);
-                logger.LogInformation("Добавлена книга: " + bookName);
+                b++;
+                logger.LogInformation(b + " Добавлена книга: " + bookName);
             }
         }
     }
